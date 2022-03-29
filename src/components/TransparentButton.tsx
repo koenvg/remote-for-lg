@@ -20,7 +20,7 @@ export const TransparentButton: FunctionComponent<Props> = ({
 }) => {
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
-      <Text style={styles.text}>{children}</Text>
+      {children}
     </TouchableOpacity>
   );
 };
@@ -31,10 +31,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     paddingHorizontal: 10,
-  },
-  text: {
-    color: 'white',
-    fontSize: 16,
   },
 });
 TransparentButton.displayName = 'TransparentButton';

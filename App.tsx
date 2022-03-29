@@ -10,8 +10,6 @@
 
 import React from 'react';
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-
-import {Colors} from 'react-native/Libraries/NewAppScreen';
 import {LGTVProvider} from './src/api/LGTVProvider';
 import {Home} from './src/pages/Home';
 import {theme} from './src/theme';

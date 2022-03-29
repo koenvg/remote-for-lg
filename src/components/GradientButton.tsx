@@ -21,7 +21,7 @@ export const GradientButton: FunctionComponent<Props> = ({
   style,
 }) => {
   return (
-    <TouchableOpacity style={[{minHeight: 50}, style]} onPress={onPress}>
+    <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <LinearGradient
         colors={[theme[800], theme[900]]}
         style={[styles.gradient]}>
@@ -32,11 +32,14 @@ export const GradientButton: FunctionComponent<Props> = ({
 };
 
 const styles = StyleSheet.create({
+  button: {
+    minHeight: 50,
+  },
   gradient: {
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-
+    borderRadius: 20,
     paddingHorizontal: 10,
   },
   text: {

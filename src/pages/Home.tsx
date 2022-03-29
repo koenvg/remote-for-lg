@@ -1,10 +1,11 @@
 import React, {FunctionComponent} from 'react';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useLGTVapi} from '../api/LGTVProvider';
 import {GradientButton} from '../components/GradientButton';
 import {TransparentButton} from '../components/TransparentButton';
 import {theme} from '../theme';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 export interface Props {}
 
@@ -50,6 +51,11 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     // flex: 1,
   },
+  clickButton: {
+    height: 50,
+    width: 50,
+    borderRadius: 9999,
+  },
 });
 
 export const Home: FunctionComponent<Props> = () => {
@@ -59,23 +65,66 @@ export const Home: FunctionComponent<Props> = () => {
     <View style={styles.container}>
       <View style={styles.topBottomContainer}>
         <GradientButton style={styles.button} onPress={() => api?.powerOff()}>
-          OFF
+          <MaterialCommunityIcons name="power" color={'white'} size={30} />
         </GradientButton>
         <GradientButton
           style={styles.button}
           onPress={() => api?.press('HOME')}>
-          HOME
+          <MaterialCommunityIcons
+            name="home-outline"
+            color={'white'}
+            size={30}
+          />
         </GradientButton>
       </View>
       <View style={styles.middleContainer}>
         <LinearGradient colors={[theme[800], theme[900]]} style={styles.circle}>
-          <TransparentButton style={styles.button}>Up</TransparentButton>
+          <TransparentButton
+            style={styles.button}
+            onPress={() => api?.press('UP')}>
+            <MaterialCommunityIcons
+              name="chevron-up"
+              color={'white'}
+              size={30}
+            />
+          </TransparentButton>
           <View style={styles.circleMiddleContainer}>
-            <TransparentButton style={styles.button}>Left</TransparentButton>
-            <TransparentButton style={styles.button}>Middle</TransparentButton>
-            <TransparentButton style={styles.button}>Right</TransparentButton>
+            <TransparentButton
+              style={styles.button}
+              onPress={() => api?.press('LEFT')}>
+              <MaterialCommunityIcons
+                name="chevron-left"
+                color={'white'}
+                size={30}
+              />
+            </TransparentButton>
+            <TransparentButton
+              style={styles.button}
+              onPress={() => api?.click()}>
+              <LinearGradient
+                colors={['#0d9488', '#0891b2']}
+                style={styles.clickButton}
+              />
+            </TransparentButton>
+            <TransparentButton
+              style={styles.button}
+              onPress={() => api?.press('RIGHT')}>
+              <MaterialCommunityIcons
+                name="chevron-right"
+                color={'white'}
+                size={30}
+              />
+            </TransparentButton>
           </View>
-          <TransparentButton style={styles.button}>Down</TransparentButton>
+          <TransparentButton
+            style={styles.button}
+            onPress={() => api?.press('DOWN')}>
+            <MaterialCommunityIcons
+              name="chevron-down"
+              color={'white'}
+              size={30}
+            />
+          </TransparentButton>
         </LinearGradient>
       </View>
       <View style={styles.topBottomContainer}></View>
