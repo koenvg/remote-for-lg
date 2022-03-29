@@ -10,7 +10,6 @@
     "lint": "eslint . --ext .js,.jsx,.ts,.tsx"
   },
   "dependencies": {
-    "lgtv2": "^1.6.3",
     "react": "17.0.2",
     "react-native": "0.67.4",
     "react-native-linear-gradient": "^2.5.6"

@@ -1,31 +1,55 @@
-import React, {FunctionComponent} from 'react';
-import {connect} from './LGAPI';
-// const connectToTv = require('lgtv2');
-
-// const lgtv = require('lgtv2')({
-//   url: 'ws://lgwebostv:3000',
-// });
-
-// lgtv.on('error', function (err) {
-//   console.log(err);
-// });
-
-// lgtv.on('connect', function () {
-//   console.log('connected');
-
-//   lgtv.subscribe('ssap://audio/getVolume', function (err, res) {
-//     if (res.changed.indexOf('volume') !== -1)
-//       console.log('volume changed', res.volume);
-//     if (res.changed.indexOf('muted') !== -1)
-//       console.log('mute changed', res.muted);
-//   });
-// });
+import React, {FunctionComponent, useContext, useEffect, useState} from 'react';
+import {Text} from 'react-native';
+import {connect, LGAPI} from './LGAPI';
+import {useAppState} from '../hooks/useAppState';
 
 export interface Props {}
 
+interface LGContext {
+  connected: boolean;
+  api?: LGAPI;
+}
+
+const LGTVContext = React.createContext<LGContext>({
+  connected: false,
+});
+
 export const LGTVProvider: FunctionComponent<Props> = ({children}) => {
-  connect({});
-  return <>{children}</>;
+  const appState = useAppState();
+  const [context, setContext] = useState<LGContext>({connected: false} as any);
+  const [error, setError] = useState<string | undefined>();
+
+  useEffect(() => {
+    if (context.connected || appState !== 'active') return;
+    const fn = async () => {
+      try {
+        const api = await connect({});
+        setContext({connected: true, api});
+      } catch (e) {
+        setError(e as any);
+      }
+    };
+    fn();
+  }, [appState, context.connected]);
+
+  useEffect(() => {
+    if (!context.api) return;
+
+    const handler = () => setContext({connected: false});
+    context.api.socket.addEventListener('close', handler);
+
+    return () => context.api?.socket.removeEventListener('close', handler);
+  }, [context.api]);
+
+  // if (error) return <Text>Error: {JSON.stringify(error)}</Text>;
+
+  // if (!context.connected) return <Text>Connecting...</Text>;
+
+  return (
+    <LGTVContext.Provider value={context}>{children}</LGTVContext.Provider>
+  );
 };
 
 LGTVProvider.displayName = 'LGTVProvider';
+
+export const useLGTVapi = () => useContext(LGTVContext);

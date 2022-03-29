@@ -1,4 +1,3 @@
-import {DeviceEventEmitter} from 'react-native';
 import pairing from './pairing.json';
 
 interface Config {
@@ -13,48 +12,155 @@ function getCid() {
   return cidPrefix + ('000' + (cidCount++).toString(16)).slice(-4);
 }
 
-const json = JSON.stringify({
-  id: getCid(),
-  type: 'subscribe',
-  uri: 'ssap://audio/getVolume',
-  // payload: {volume: 7},
-});
+interface Message {
+  type: 'request';
+  payload?: any;
+  uri?: string;
+}
 
-export const connect = ({url = 'ws://192.168.68.61:3000'}: Config) => {
-  const socket = new WebSocket(url, '', {
-    headers: {
-      Origin: 'null',
-    },
-  });
+interface Response {
+  id: string;
+  type: 'registered';
+  payload?: any;
+}
 
-  console.log('Connecting');
-  const payload = {
-    ...pairing,
-    'client-key': '708019c71bd81683c22bc3a86f2ddffe',
-  };
+const sendRequest = (data: Message, socket: WebSocket) => {
+  const id = getCid();
+  return new Promise<Response>((resolve, reject) => {
+    const handler = (response: WebSocketMessageEvent) => {
+      const res = JSON.parse(response.data);
+      if (res.id !== id) return;
 
-  socket.addEventListener('open', () => {
-    socket.send(
-      JSON.stringify({
-        type: 'register',
-        id: getCid(),
-        payload: payload,
-      }),
-    );
-    // console.log(connection);
-  });
+      socket.removeEventListener('message', handler);
+      console.log(res);
+      if (res.type === 'error') return reject(res);
+      resolve(res);
+    };
 
-  socket.addEventListener('close', message => {
-    console.log('closed', message);
-  });
-
-  socket.addEventListener('message', message => {
-    console.log(message);
-    socket.send(json);
-  });
-
-  socket.addEventListener('error', error => {
-    console.error('FAILED TO CONNECT TO SOCKET');
-    console.error(error);
+    socket.addEventListener('message', handler);
+    socket.send(JSON.stringify({...data, id}));
   });
 };
+
+const authorize = async (socket: WebSocket) => {
+  const auth = await sendRequest(pairing as any, socket);
+  return auth;
+  // TODO new pairing requests
+};
+
+const createSocket = (url: string) => {
+  return new Promise<WebSocket>((resolve, reject) => {
+    const socket = new WebSocket(url, '', {
+      headers: {
+        Origin: 'null',
+      },
+    });
+
+    const openHandler = () => {
+      cleanup();
+      resolve(socket);
+    };
+
+    const errorHandler = (err: WebSocketErrorEvent) => {
+      cleanup();
+      console.error(err);
+      reject(err);
+    };
+
+    const cleanup = () => {
+      socket.removeEventListener('error', errorHandler);
+      socket.removeEventListener('open', openHandler);
+    };
+
+    socket.addEventListener('open', openHandler);
+    socket.addEventListener('error', errorHandler);
+  });
+};
+
+export const connect = async ({url = 'ws://192.168.68.61:3000'}: Config) => {
+  const socket = await createSocket(url);
+  await authorize(socket);
+
+  return new LGAPI(socket);
+};
+
+type Button =
+  | 'LEFT'
+  | 'UP'
+  | 'DOWN'
+  | 'RIGHT'
+  | 'HOME'
+  | 'BACK'
+  | 'ENTER'
+  | 'BACK'
+  | 'DASH'
+  | 'INFO'
+  | 'EXIT'
+  | 'VOLUMEUP'
+  | 'VOLUMEDOWN'
+  | 'PLAY'
+  | 'PAUSE'
+  | 'STOP'
+  | 'REWIND'
+  | 'FASTFORWARD';
+
+export class LGAPI {
+  private pointerSocket: WebSocket | null = null;
+  constructor(public socket: WebSocket) {}
+
+  private async getPointerSocket() {
+    if (this.pointerSocket) return this.pointerSocket;
+
+    const {
+      payload: {socketPath},
+    } = await sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://com.webos.service.networkinput/getPointerInputSocket',
+      } as any,
+      this.socket,
+    );
+
+    this.pointerSocket = await createSocket(socketPath);
+    return this.pointerSocket;
+  }
+
+  powerOff() {
+    return sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://system/turnOff',
+      },
+      this.socket,
+    );
+  }
+  volumeUp() {
+    return sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://audio/volumeUp',
+      },
+      this.socket,
+    );
+  }
+
+  volumeDown() {
+    return sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://audio/volumeDown',
+      },
+      this.socket,
+    );
+  }
+
+  async click() {
+    const p = await this.getPointerSocket();
+    p.send('type:click\n\n\n');
+  }
+
+  async press(button: Button) {
+    const p = await this.getPointerSocket();
+    p.send(`type:button\nname:${button}\n\n\n`);
+  }
+}
