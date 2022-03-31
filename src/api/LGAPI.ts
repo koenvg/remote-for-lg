@@ -18,21 +18,35 @@ interface Message {
   uri?: string;
 }
 
-interface Response {
+interface Response<T = undefined> {
   id: string;
   type: 'registered';
-  payload?: any;
+  payload: T;
 }
 
-const sendRequest = (data: Message, socket: WebSocket) => {
+interface PointerInputSocketResponse {
+  socketPath: string;
+}
+
+interface VolumeStatusResponse {
+  mute: boolean;
+  scenario: string;
+  volume: number;
+  volumeMax: number;
+}
+
+const sendRequest = <T = undefined>(
+  data: Message,
+  socket: WebSocket,
+): Promise<Response<T>> => {
   const id = getCid();
-  return new Promise<Response>((resolve, reject) => {
+  return new Promise<Response<T>>((resolve, reject) => {
     const handler = (response: WebSocketMessageEvent) => {
       const res = JSON.parse(response.data);
       if (res.id !== id) return;
 
       socket.removeEventListener('message', handler);
-      console.log(res);
+
       if (res.type === 'error') return reject(res);
       resolve(res);
     };
@@ -113,7 +127,7 @@ export class LGAPI {
 
     const {
       payload: {socketPath},
-    } = await sendRequest(
+    } = await sendRequest<PointerInputSocketResponse>(
       {
         type: 'request',
         uri: 'ssap://com.webos.service.networkinput/getPointerInputSocket',
@@ -149,6 +163,29 @@ export class LGAPI {
       {
         type: 'request',
         uri: 'ssap://audio/volumeDown',
+      },
+      this.socket,
+    );
+  }
+
+  async getVolume() {
+    const response = await sendRequest<VolumeStatusResponse>(
+      {
+        type: 'request',
+        uri: 'ssap://audio/getStatus',
+      },
+      this.socket,
+    );
+
+    return response.payload;
+  }
+
+  setVolume(volume: number) {
+    return sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://audio/setVolume',
+        payload: {volume},
       },
       this.socket,
     );

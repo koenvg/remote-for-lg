@@ -11,14 +11,16 @@
 import React from 'react';
 import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
 import {LGTVProvider} from './src/api/LGTVProvider';
+import {discoverDevices} from './src/api/networkDiscovery';
 import {Home} from './src/pages/Home';
 import {theme} from './src/theme';
+discoverDevices();
 
 const App = () => {
   const isDarkMode = useColorScheme() === 'dark';
 
   const backgroundStyle = {
-    backgroundColor: theme[700],
+    backgroundColor: theme[800],
     flex: 1,
   };
 

@@ -1,11 +1,13 @@
-import React, {FunctionComponent} from 'react';
-import {StyleSheet, View} from 'react-native';
+import React, {FunctionComponent, useEffect, useState} from 'react';
+import {StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
 import {useLGTVapi} from '../api/LGTVProvider';
 import {GradientButton} from '../components/GradientButton';
 import {TransparentButton} from '../components/TransparentButton';
 import {theme} from '../theme';
+// @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import Slider from '@react-native-community/slider';
 
 export interface Props {}
 
@@ -31,7 +33,6 @@ const styles = StyleSheet.create({
     flex: 8,
   },
   circle: {
-    // backgroundColor: 'blue',
     width: 300,
     height: 300,
     borderRadius: 9999,
@@ -46,33 +47,61 @@ const styles = StyleSheet.create({
     alignItems: 'stretch',
     alignContent: 'stretch',
   },
-
+  row: {
+    width: '100%',
+    display: 'flex',
+    justifyContent: 'space-between',
+    flexDirection: 'row',
+    height: 60,
+    marginTop: -25,
+  },
   button: {
     marginHorizontal: 5,
-    // flex: 1,
   },
   clickButton: {
-    height: 50,
-    width: 50,
+    height: 60,
+    width: 60,
     borderRadius: 9999,
+  },
+  volumeSlider: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    flexDirection: 'column',
+    marginLeft: 10,
+    marginRight: 10,
   },
 });
 
 export const Home: FunctionComponent<Props> = () => {
   const {api} = useLGTVapi();
+  const [volume, setVolume] = useState(0);
+
+  useEffect(() => {
+    const fn = async () => {
+      const status = await api?.getVolume();
+      setVolume(status?.volume || 0);
+    };
+    fn();
+  }, [api]);
+
+  const updateVolume = (to: number) => {
+    api?.setVolume(to);
+    setVolume(to);
+  };
 
   return (
     <View style={styles.container}>
       <View style={styles.topBottomContainer}>
         <GradientButton style={styles.button} onPress={() => api?.powerOff()}>
-          <MaterialCommunityIcons name="power" color={'white'} size={30} />
+          <MaterialCommunityIcons name="power" color={theme[50]} size={30} />
         </GradientButton>
         <GradientButton
           style={styles.button}
           onPress={() => api?.press('HOME')}>
           <MaterialCommunityIcons
             name="home-outline"
-            color={'white'}
+            color={theme[50]}
             size={30}
           />
         </GradientButton>
@@ -84,7 +113,7 @@ export const Home: FunctionComponent<Props> = () => {
             onPress={() => api?.press('UP')}>
             <MaterialCommunityIcons
               name="chevron-up"
-              color={'white'}
+              color={theme[50]}
               size={30}
             />
           </TransparentButton>
@@ -94,7 +123,7 @@ export const Home: FunctionComponent<Props> = () => {
               onPress={() => api?.press('LEFT')}>
               <MaterialCommunityIcons
                 name="chevron-left"
-                color={'white'}
+                color={theme[50]}
                 size={30}
               />
             </TransparentButton>
@@ -102,7 +131,7 @@ export const Home: FunctionComponent<Props> = () => {
               style={styles.button}
               onPress={() => api?.click()}>
               <LinearGradient
-                colors={['#0d9488', '#0891b2']}
+                colors={['#2dd4bf', '#22d3ee']}
                 style={styles.clickButton}
               />
             </TransparentButton>
@@ -111,7 +140,7 @@ export const Home: FunctionComponent<Props> = () => {
               onPress={() => api?.press('RIGHT')}>
               <MaterialCommunityIcons
                 name="chevron-right"
-                color={'white'}
+                color={theme[50]}
                 size={30}
               />
             </TransparentButton>
@@ -121,13 +150,46 @@ export const Home: FunctionComponent<Props> = () => {
             onPress={() => api?.press('DOWN')}>
             <MaterialCommunityIcons
               name="chevron-down"
-              color={'white'}
+              color={theme[50]}
               size={30}
             />
           </TransparentButton>
         </LinearGradient>
+        <View style={styles.row}>
+          <GradientButton
+            style={styles.button}
+            onPress={() => api?.press('BACK')}>
+            <MaterialCommunityIcons
+              name="arrow-u-left-bottom"
+              color={theme[50]}
+              size={30}
+            />
+          </GradientButton>
+          <GradientButton
+            style={styles.button}
+            onPress={() => api?.press('INFO')}>
+            <MaterialCommunityIcons
+              name="information-outline"
+              color={theme[50]}
+              size={30}
+            />
+          </GradientButton>
+        </View>
       </View>
-      <View style={styles.topBottomContainer}></View>
+      <View style={[styles.topBottomContainer, styles.volumeSlider]}>
+        <Text style={{color: theme[50]}}>Volume</Text>
+        <Slider
+          style={{width: '100%', height: 40}}
+          minimumValue={0}
+          maximumValue={20}
+          step={1}
+          value={volume}
+          minimumTrackTintColor={theme[100]}
+          maximumTrackTintColor={theme[500]}
+          thumbTintColor={'#22d3ee'}
+          onValueChange={updateVolume}
+        />
+      </View>
     </View>
   );
 };

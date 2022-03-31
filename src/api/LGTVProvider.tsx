@@ -41,9 +41,11 @@ export const LGTVProvider: FunctionComponent<Props> = ({children}) => {
     return () => context.api?.socket.removeEventListener('close', handler);
   }, [context.api]);
 
-  // if (error) return <Text>Error: {JSON.stringify(error)}</Text>;
+  if (error)
+    return <Text style={{color: 'white'}}>Error: {JSON.stringify(error)}</Text>;
 
-  // if (!context.connected) return <Text>Connecting...</Text>;
+  if (!context.connected)
+    return <Text style={{color: 'white'}}>Connecting...</Text>;
 
   return (
     <LGTVContext.Provider value={context}>{children}</LGTVContext.Provider>
