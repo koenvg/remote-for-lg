@@ -10,4 +10,8 @@ const zinc = {
   800: '#27272a',
   900: '#18181b',
 };
-export const theme = zinc;
+export const theme = {
+  primary: zinc,
+  red: '#dc2626',
+  green: '#16a34a',
+};

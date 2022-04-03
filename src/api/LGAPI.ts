@@ -1,7 +1,8 @@
 import pairing from './pairing.json';
 
 interface Config {
-  url?: string;
+  ip: string;
+  clientKey: string;
 }
 
 var cidPrefix = (
@@ -56,10 +57,30 @@ const sendRequest = <T = undefined>(
   });
 };
 
-const authorize = async (socket: WebSocket) => {
-  const auth = await sendRequest(pairing as any, socket);
-  return auth;
-  // TODO new pairing requests
+const waitForSuccessfullyRegistered = (socket: WebSocket, id: string) => {
+  return new Promise((resolve, reject) => {
+    const handler = (message: WebSocketMessageEvent) => {
+      const res = JSON.parse(message.data);
+      if (res.id !== id) return;
+
+      socket.removeEventListener('message', handler);
+
+      if (res.type === 'error') return reject(res);
+      resolve(res);
+    };
+    socket.addEventListener('message', handler);
+  });
+};
+const authorize = async (socket: WebSocket, clientID?: string) => {
+  const request = {
+    ...pairing,
+    payload: {
+      ...pairing.payload,
+      'client-key': clientID,
+    },
+  };
+
+  return sendRequest(request as any, socket);
 };
 
 const createSocket = (url: string) => {
@@ -91,11 +112,29 @@ const createSocket = (url: string) => {
   });
 };
 
-export const connect = async ({url = 'ws://192.168.68.61:3000'}: Config) => {
-  const socket = await createSocket(url);
-  await authorize(socket);
+export const connect = async ({ip, clientKey}: Config) => {
+  const socket = await createSocket(`ws://${ip}:3000`);
+  await authorize(socket, clientKey);
 
   return new LGAPI(socket);
+};
+
+export const authorizeApp = async (ip: string) => {
+  const socket = await createSocket(`ws://${ip}:3000`);
+
+  // This will request the authorization when not passing a client-key.
+  const res = await authorize(socket);
+
+  const auth = (await waitForSuccessfullyRegistered(
+    socket,
+    res.id,
+  )) as Response<{
+    'client-key': string;
+  }>;
+
+  socket.close();
+
+  return auth.payload;
 };
 
 type Button =
@@ -137,6 +176,11 @@ export class LGAPI {
 
     this.pointerSocket = await createSocket(socketPath);
     return this.pointerSocket;
+  }
+
+  close() {
+    if (this.pointerSocket) this.pointerSocket.close();
+    this.socket.close();
   }
 
   powerOff() {

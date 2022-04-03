@@ -9,28 +9,16 @@
  */
 
 import React from 'react';
-import {SafeAreaView, StatusBar, useColorScheme} from 'react-native';
-import {LGTVProvider} from './src/api/LGTVProvider';
-import {discoverDevices} from './src/api/networkDiscovery';
-import {Home} from './src/pages/Home';
-import {theme} from './src/theme';
-discoverDevices();
+import {QueryClient, QueryClientProvider} from 'react-query';
+import {LoadTVs} from './src/components/LoadTVs';
+
+const queryClient = new QueryClient();
 
 const App = () => {
-  const isDarkMode = useColorScheme() === 'dark';
-
-  const backgroundStyle = {
-    backgroundColor: theme[800],
-    flex: 1,
-  };
-
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <LGTVProvider>
-        <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-        <Home />
-      </LGTVProvider>
-    </SafeAreaView>
+    <QueryClientProvider client={queryClient}>
+      <LoadTVs />
+    </QueryClientProvider>
   );
 };
 

@@ -23,7 +23,7 @@ export const GradientButton: FunctionComponent<Props> = ({
   return (
     <TouchableOpacity style={[styles.button, style]} onPress={onPress}>
       <LinearGradient
-        colors={[theme[800], theme[900]]}
+        colors={[theme.primary[800], theme.primary[900]]}
         style={[styles.gradient]}>
         <Text style={styles.text}>{children}</Text>
       </LinearGradient>

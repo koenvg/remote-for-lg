@@ -1,6 +1,7 @@
 import dgram from 'react-native-udp';
 import {Buffer} from 'buffer';
 import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
+import {XMLParser} from 'fast-xml-parser';
 
 const send = (
   socket: UdpSocket,
@@ -20,7 +21,7 @@ const broadcastSsdp = (
   socket: UdpSocket,
   ip: string = '239.255.255.250',
   port: number = 1900,
-  target: string = 'ssdp:all',
+  target: string = 'urn:schemas-upnp-org:device:MediaRenderer:1',
 ) => {
   const query = Buffer.from(
     'M-SEARCH * HTTP/1.1\r\n' +
@@ -34,20 +35,20 @@ const broadcastSsdp = (
   return send(socket, query, ip, port);
 };
 
-interface SsdpResponse {
-  LOCATION: string;
-  SERVER: string;
-  OPT: string;
-  USN: string;
-  ST: string;
+export interface SsdpResponse {
+  location: string;
+  server: string;
+  usn: string;
+  st: string;
+  wakeup?: string;
 }
 
-interface DeviceInfo {
+export interface DeviceInfo {
   address: string;
   family: string;
   port: number;
 }
-interface Device {
+export interface Service {
   info: DeviceInfo;
   response: SsdpResponse;
 }
@@ -59,7 +60,7 @@ const parseMessage = (msg: Buffer) => {
     .split('\n')
     .map(line => {
       const [key, ...value] = line.split(':');
-      return [key, value.join(':').trim()];
+      return [key.toLowerCase(), value.join(':').trim()];
     })
     .filter(([key, value]) => !!key && !!value)
     .reduce((acc, [key, value]) => {
@@ -70,31 +71,25 @@ const parseMessage = (msg: Buffer) => {
   return response;
 };
 
-export const discoverDevices = () => {
-  return new Promise<Device[]>((resolve, reject) => {
-    let timeoutID: number;
+export const discoverServices = () => {
+  return new Promise<Service[]>((resolve, reject) => {
     const socket = dgram.createSocket({type: 'udp4', debug: true});
     socket.bind(12345);
-    const devices: Device[] = [];
+    const services: Service[] = [];
 
     socket.once('listening', () => {
       broadcastSsdp(socket, '239.255.255.250', 1900);
-    });
-
-    const closeSocketWithTimeout = () =>
       setTimeout(() => {
         socket.close();
-        resolve(devices);
-      }, 100);
+        resolve(services);
+      }, 4000);
+    });
 
     socket.on('message', function (msg: Buffer, info: DeviceInfo) {
-      devices.push({
+      services.push({
         info,
         response: parseMessage(msg),
       });
-
-      clearTimeout(timeoutID);
-      timeoutID = closeSocketWithTimeout() as any;
     });
 
     socket.on('error', error => {
@@ -103,3 +98,23 @@ export const discoverDevices = () => {
     });
   });
 };
+
+export interface DeviceDescription {
+  friendlyName: string;
+}
+
+export async function fetchDeviceDescription(
+  deviceInfo: SsdpResponse,
+): Promise<DeviceDescription> {
+  const res = await fetch(deviceInfo.location);
+  if (res.status >= 300) throw new Error(res.statusText);
+
+  if (!res.headers.get('Content-Type')?.includes('text/xml'))
+    throw new Error('Invalid device information response');
+
+  const content = await res.text();
+
+  const parser = new XMLParser();
+  const obj = parser.parse(content);
+  return obj.root.device;
+}
