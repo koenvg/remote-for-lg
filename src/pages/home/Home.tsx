@@ -13,9 +13,9 @@ export const Home: FunctionComponent<Props> = () => {
   const value = useLGTV(tv);
   const {connected, error} = value;
 
-  if (!connected) return <Text>Connecting...</Text>;
-
   if (error) return <Text>{JSON.stringify(error)}</Text>;
+
+  if (!connected) return <Text>Connecting...</Text>;
 
   return (
     <LGTVProvider context={value}>

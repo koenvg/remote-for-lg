@@ -3,7 +3,7 @@ import {Buffer} from 'buffer';
 import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 import {XMLParser} from 'fast-xml-parser';
 import {flow, pipe} from 'fp-ts/lib/function';
-import {option, readonlyNonEmptyArray, string} from 'fp-ts';
+import {option, readonlyNonEmptyArray, record, string} from 'fp-ts';
 
 const send = (
   socket: UdpSocket,
@@ -19,11 +19,13 @@ const send = (
   });
 };
 
+// ssdp:all
+// urn:schemas-upnp-org:device:MediaRenderer:1
 const broadcastSsdp = (
   socket: UdpSocket,
   ip: string = '239.255.255.250',
   port: number = 1900,
-  target: string = 'urn:schemas-upnp-org:device:MediaRenderer:1',
+  target: string = 'urn:dial-multiscreen-org:service:dial:1',
 ) => {
   const query = Buffer.from(
     'M-SEARCH * HTTP/1.1\r\n' +
@@ -79,12 +81,18 @@ function extractMAC(ssdp: SsdpResponse) {
     option.fromNullable(ssdp.wakeup),
     option.map(
       flow(
-        string.split('='),
-        readonlyNonEmptyArray.last,
-        string.split(' '),
-        readonlyNonEmptyArray.head,
+        string.split(';'),
+        readonlyNonEmptyArray.map(string.split('=')),
+        readonlyNonEmptyArray.reduce(
+          {} as Record<string, string>,
+          (acc, [key, value]) => {
+            acc[key] = value;
+            return acc;
+          },
+        ),
       ),
     ),
+    option.chain(record.lookup('MAC')),
     option.getOrElse(() => ''),
   );
 }

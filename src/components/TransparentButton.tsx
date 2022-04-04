@@ -3,7 +3,6 @@ import {
   GestureResponderEvent,
   StyleProp,
   StyleSheet,
-  Text,
   TouchableOpacity,
   ViewStyle,
 } from 'react-native';
@@ -27,10 +26,10 @@ export const TransparentButton: FunctionComponent<Props> = ({
 
 const styles = StyleSheet.create({
   button: {
-    flex: 1,
+    display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingHorizontal: 10,
+    padding: 10,
   },
 });
 TransparentButton.displayName = 'TransparentButton';

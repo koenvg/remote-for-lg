@@ -8,6 +8,7 @@ import {Home} from './home/Home';
 import {StackParamList} from './navigation';
 import {SearchDevices} from './newDevice/SearchDevices';
 import {TV, tvService} from '../services/tvService';
+import {theme} from '../theme';
 
 export interface Props {}
 
@@ -55,7 +56,8 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={state.type === 'no_default_tv' ? 'SearchTV' : 'Home'}>
+        initialRouteName={state.type === 'no_default_tv' ? 'SearchTV' : 'Home'}
+        screenOptions={{contentStyle: {backgroundColor: theme.primary[200]}}}>
         <Stack.Screen
           name="SearchTV"
           component={SearchDevices}
@@ -64,7 +66,9 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
         <Stack.Screen
           name="Home"
           component={Home}
-          options={{headerShown: false}}
+          options={{
+            headerShown: false,
+          }}
           initialParams={state.type === 'default_tv' ? state.tv : undefined}
         />
         <Stack.Screen
