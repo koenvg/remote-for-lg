@@ -1,15 +1,15 @@
 import {useRoute} from '@react-navigation/native';
 import React, {FunctionComponent} from 'react';
 import {Text} from 'react-native';
-import {LGTVProvider, useLGTV} from '../../api/LGTVProvider';
-import {HomeScreen} from '../navigation';
+import {LGTVProvider, useLGTV} from '../../api/lg/LGTVProvider';
+import {HomeRoute} from '../navigation';
 
 import {Remote} from './Remote';
 
 export interface Props {}
 
 export const Home: FunctionComponent<Props> = () => {
-  const {params: tv} = useRoute<HomeScreen['route']>();
+  const {params: tv} = useRoute<HomeRoute['route']>();
   const value = useLGTV(tv);
   const {connected, error} = value;
 

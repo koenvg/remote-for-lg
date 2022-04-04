@@ -7,7 +7,7 @@ export interface TV {
   ip: string;
   clientKey: string;
   default: boolean;
-  macAddress?: string;
+  mac?: string;
 }
 
 const getRegisteredTVs = pipe(

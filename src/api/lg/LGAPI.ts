@@ -112,11 +112,25 @@ const createSocket = (url: string) => {
   });
 };
 
+async function createPointerSocket(socket: WebSocket) {
+  const {
+    payload: {socketPath},
+  } = await sendRequest<PointerInputSocketResponse>(
+    {
+      type: 'request',
+      uri: 'ssap://com.webos.service.networkinput/getPointerInputSocket',
+    } as any,
+    socket,
+  );
+
+  return createSocket(socketPath);
+}
+
 export const connect = async ({ip, clientKey}: Config) => {
   const socket = await createSocket(`ws://${ip}:3000`);
   await authorize(socket, clientKey);
-
-  return new LGAPI(socket);
+  const pointerSocket = await createPointerSocket(socket);
+  return new LGAPI(socket, pointerSocket);
 };
 
 export const authorizeApp = async (ip: string) => {
@@ -158,11 +172,12 @@ type Button =
   | 'FASTFORWARD';
 
 export class LGAPI {
-  private pointerSocket: WebSocket | null = null;
-  constructor(public socket: WebSocket) {}
+  constructor(public socket: WebSocket, private pointerSocket: WebSocket) {}
 
   private async getPointerSocket() {
-    if (this.pointerSocket) return this.pointerSocket;
+    if (this.pointerSocket) {
+      return this.pointerSocket;
+    }
 
     const {
       payload: {socketPath},
@@ -183,15 +198,18 @@ export class LGAPI {
     this.socket.close();
   }
 
-  powerOff() {
-    return sendRequest(
+  async powerOff() {
+    const res = await sendRequest(
       {
         type: 'request',
         uri: 'ssap://system/turnOff',
       },
       this.socket,
     );
+    this.close();
+    return res;
   }
+
   volumeUp() {
     return sendRequest(
       {

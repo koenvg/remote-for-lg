@@ -1,7 +1,6 @@
 import React, {FunctionComponent, useContext, useEffect, useState} from 'react';
 import {connect, LGAPI} from './LGAPI';
-import {useAppState} from '../hooks/useAppState';
-import {TV} from '../services/tvService';
+import {useAppState} from '../../hooks/useAppState';
 
 export interface Props {
   context: LGContext;
@@ -17,7 +16,7 @@ const LGTVContext = React.createContext<LGContext>({
   connected: false,
 });
 
-export const useLGTV = (tv: TV) => {
+export const useLGTV = (tv: {ip: string; clientKey: string}) => {
   const appState = useAppState();
 
   const [context, setContext] = useState<LGContext>({connected: false} as any);

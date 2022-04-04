@@ -1,7 +1,7 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 import LinearGradient from 'react-native-linear-gradient';
-import {useLGTVapi} from '../../api/LGTVProvider';
+import {useLGTVapi} from '../../api/lg/LGTVProvider';
 import {GradientButton} from '../../components/GradientButton';
 import {TransparentButton} from '../../components/TransparentButton';
 import {theme} from '../../theme';

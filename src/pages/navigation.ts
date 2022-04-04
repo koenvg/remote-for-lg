@@ -15,5 +15,5 @@ export type StackParamList = {
 export const useNavigation = () =>
   useNav<NativeStackNavigationProp<StackParamList>>();
 
-export type AddTVScreen = NativeStackScreenProps<StackParamList, 'AddTV'>;
-export type HomeScreen = NativeStackScreenProps<StackParamList, 'Home'>;
+export type AddTVRoute = NativeStackScreenProps<StackParamList, 'AddTV'>;
+export type HomeRoute = NativeStackScreenProps<StackParamList, 'Home'>;

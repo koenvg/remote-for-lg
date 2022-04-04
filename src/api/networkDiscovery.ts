@@ -2,6 +2,8 @@ import dgram from 'react-native-udp';
 import {Buffer} from 'buffer';
 import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 import {XMLParser} from 'fast-xml-parser';
+import {flow, pipe} from 'fp-ts/lib/function';
+import {option, readonlyNonEmptyArray, string} from 'fp-ts';
 
 const send = (
   socket: UdpSocket,
@@ -47,6 +49,7 @@ export interface DeviceInfo {
   address: string;
   family: string;
   port: number;
+  mac?: string;
 }
 export interface Service {
   info: DeviceInfo;
@@ -71,6 +74,21 @@ const parseMessage = (msg: Buffer) => {
   return response;
 };
 
+function extractMAC(ssdp: SsdpResponse) {
+  return pipe(
+    option.fromNullable(ssdp.wakeup),
+    option.map(
+      flow(
+        string.split('='),
+        readonlyNonEmptyArray.last,
+        string.split(' '),
+        readonlyNonEmptyArray.head,
+      ),
+    ),
+    option.getOrElse(() => ''),
+  );
+}
+
 export const discoverServices = () => {
   return new Promise<Service[]>((resolve, reject) => {
     const socket = dgram.createSocket({type: 'udp4', debug: true});
@@ -85,10 +103,14 @@ export const discoverServices = () => {
       }, 4000);
     });
 
-    socket.on('message', function (msg: Buffer, info: DeviceInfo) {
+    socket.on('message', function (msg: Buffer, info: Omit<DeviceInfo, 'mac'>) {
+      const response = parseMessage(msg);
       services.push({
-        info,
-        response: parseMessage(msg),
+        info: {
+          ...info,
+          mac: extractMAC(response),
+        },
+        response,
       });
     });
 

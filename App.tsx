@@ -10,14 +10,14 @@
 
 import React from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
-import {LoadTVs} from './src/components/LoadTVs';
+import {AppLoader} from './src/pages/AppLoader';
 
 const queryClient = new QueryClient();
 
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <LoadTVs />
+      <AppLoader />
     </QueryClientProvider>
   );
 };

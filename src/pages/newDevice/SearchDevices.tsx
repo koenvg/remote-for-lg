@@ -1,15 +1,5 @@
-import {
-  task,
-  nonEmptyArray,
-  record,
-  taskEither,
-  array,
-  either,
-  readonlyArray,
-  string,
-} from 'fp-ts';
+import {task, taskEither, array, either, readonlyArray} from 'fp-ts';
 import {flow, pipe} from 'fp-ts/lib/function';
-import {NonEmptyArray} from 'fp-ts/lib/NonEmptyArray';
 import React, {FunctionComponent} from 'react';
 import {Button, StyleSheet, Text, View} from 'react-native';
 import {useQuery} from 'react-query';
@@ -18,22 +8,10 @@ import {
   fetchDeviceDescription,
 } from '../../api/networkDiscovery';
 import {theme} from '../../theme';
+import {keepFirst} from '../../utils/array-utils';
 import {useNavigation} from '../navigation';
 import {DiscoveredTV} from './types';
 export interface Props {}
-
-function keepFirst<A>(fn: (a: A) => string) {
-  return (list: A[]): A[] => {
-    return pipe(
-      list,
-      nonEmptyArray.groupBy(fn),
-      record.reduce(string.Ord)([] as any as NonEmptyArray<A>, (acc, item) => {
-        acc.push(item[0]);
-        return acc;
-      }),
-    );
-  };
-}
 
 const discoverTVS = () => {
   return pipe(

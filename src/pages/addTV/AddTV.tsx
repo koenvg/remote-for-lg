@@ -4,15 +4,15 @@ import {pipe} from 'fp-ts/lib/function';
 import React, {FunctionComponent, useState} from 'react';
 import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
 import {useMutation} from 'react-query';
-import {authorizeApp} from '../../api/LGAPI';
+import {authorizeApp} from '../../api/lg/LGAPI';
 import {tvService} from '../../services/tvService';
 import {theme} from '../../theme';
-import {AddTVScreen, useNavigation} from '../navigation';
+import {AddTVRoute, useNavigation} from '../navigation';
 
 export interface Props {}
 
 export const AddTV: FunctionComponent<Props> = ({}) => {
-  const {params: tv} = useRoute<AddTVScreen['route']>();
+  const {params: tv} = useRoute<AddTVRoute['route']>();
   const [name, setName] = useState(tv.description.friendlyName);
   const navigation = useNavigation();
   const {isLoading, isError, mutate} = useMutation({

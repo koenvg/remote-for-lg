@@ -3,10 +3,10 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {taskEither} from 'fp-ts';
 import {pipe} from 'fp-ts/lib/function';
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {AddTV} from '../pages/addTV/AddTV';
-import {Home} from '../pages/home/Home';
-import {StackParamList} from '../pages/navigation';
-import {SearchDevices} from '../pages/newDevice/SearchDevices';
+import {AddTV} from './addTV/AddTV';
+import {Home} from './home/Home';
+import {StackParamList} from './navigation';
+import {SearchDevices} from './newDevice/SearchDevices';
 import {TV, tvService} from '../services/tvService';
 
 export interface Props {}
@@ -25,7 +25,7 @@ interface DefaultTV {
 }
 type State = Loading | NoDefaultTV | DefaultTV;
 
-export const LoadTVs: FunctionComponent<Props> = ({}) => {
+export const AppLoader: FunctionComponent<Props> = ({}) => {
   const [state, setState] = useState<State>({type: 'loading'});
 
   useEffect(() => {
@@ -79,4 +79,4 @@ export const LoadTVs: FunctionComponent<Props> = ({}) => {
   );
 };
 
-LoadTVs.displayName = 'LoadTVs';
+AppLoader.displayName = 'AppLoader';
