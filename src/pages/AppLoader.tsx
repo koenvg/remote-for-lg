@@ -74,10 +74,10 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
       <Stack.Navigator
         initialRouteName={initialRouteName}
         screenOptions={{
+          headerTintColor:
+            colorScheme === 'light' ? theme.primary[800] : theme.primary[100],
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',
-            color:
-              colorScheme === 'light' ? theme.primary[800] : theme.primary[200],
           },
           headerStyle: {
             backgroundColor:

@@ -7,7 +7,7 @@ import {useMutation} from 'react-query';
 import {authorizeApp} from '../../api/lg/LGAPI';
 import {MyText} from '../../components/MyText';
 import {tvService} from '../../services/tvService';
-import {theme} from '../../theme';
+import {colorScheme, theme} from '../../theme';
 import {AddTVRoute, useNavigation} from '../navigation';
 
 export interface Props {}
@@ -91,7 +91,8 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   input: {
-    borderColor: theme.primary[800],
+    borderColor:
+      colorScheme === 'light' ? theme.primary[800] : theme.primary[200],
     borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 4,
