@@ -72,10 +72,12 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={initialRouteName}
+        initialRouteName={'Home'}
         screenOptions={{
-          contentStyle: {backgroundColor: theme.primary[200]},
           headerTitleStyle: {fontFamily: 'Poppins-SemiBold'},
+          contentStyle: {
+            backgroundColor: theme.primary[200],
+          },
         }}>
         <Stack.Screen
           name="Welcome"
@@ -93,12 +95,13 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
           options={{
             headerShown: false,
           }}
-          initialParams={state.type === 'default_tv' ? state.tv : undefined}
+          initialParams={state.type === 'default_tv' ? state.tv : {ip: '123'}}
         />
         <Stack.Screen
           name="AddTV"
           component={AddTV}
           options={({route}) => ({
+            presentation: 'modal',
             title: `Add ${route.params.description.friendlyName}`,
           })}
         />

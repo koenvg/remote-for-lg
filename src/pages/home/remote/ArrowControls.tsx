@@ -1,12 +1,12 @@
 import React, {FunctionComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {Neumorphism} from '../../components/Neumorphism';
-import {TransparentButton} from '../../components/TransparentButton';
-import {theme} from '../../theme';
+import {Neumorphism} from 'components/Neumorphism';
+import {TransparentButton} from 'components/TransparentButton';
+import {theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useLGTVapi} from '../../api/lg/LGTVProvider';
-import {MyText} from '../../components/MyText';
+import {useLGTVapi} from 'api/lg/LGTVProvider';
+import {MyText} from 'components/MyText';
 
 export interface Props {}
 

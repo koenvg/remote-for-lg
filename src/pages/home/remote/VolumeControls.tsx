@@ -1,15 +1,15 @@
 import React, {FunctionComponent} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {Neumorphism} from '../../components/Neumorphism';
-import {TransparentButton} from '../../components/TransparentButton';
-import {theme} from '../../theme';
+import {StyleSheet, View} from 'react-native';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {MyText} from '../../components/MyText';
+import {MyText} from 'components/MyText';
+import {Neumorphism} from 'components/Neumorphism';
+import {TransparentButton} from 'components/TransparentButton';
+import {theme} from 'theme';
 
 export interface Props {}
 
-export const ChannelControls: FunctionComponent<Props> = () => {
+export const VolumeControls: FunctionComponent<Props> = () => {
   return (
     <Neumorphism
       lightColor={theme.primary[100]}
@@ -19,15 +19,15 @@ export const ChannelControls: FunctionComponent<Props> = () => {
       <View style={styles.container}>
         <TransparentButton>
           <MaterialCommunityIcons
-            name="chevron-up"
+            name="volume-plus"
             color={theme.primary[600]}
             size={24}
           />
         </TransparentButton>
-        <MyText>Ch</MyText>
+        <MyText>Vol</MyText>
         <TransparentButton>
           <MaterialCommunityIcons
-            name="chevron-down"
+            name="volume-minus"
             color={theme.primary[600]}
             size={24}
           />
@@ -36,6 +36,8 @@ export const ChannelControls: FunctionComponent<Props> = () => {
     </Neumorphism>
   );
 };
+
+VolumeControls.displayName = 'VolumeControls';
 
 const styles = StyleSheet.create({
   container: {
@@ -46,4 +48,3 @@ const styles = StyleSheet.create({
     paddingVertical: 5,
   },
 });
-ChannelControls.displayName = 'ChannelControls';

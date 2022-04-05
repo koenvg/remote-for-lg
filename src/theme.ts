@@ -43,5 +43,5 @@ export const theme = {
   primary: slate,
   red: '#dc2626',
   green: '#16a34a',
-  accent: '#22d3ee',
+  accent: '#6366f1',
 };

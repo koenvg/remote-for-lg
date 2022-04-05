@@ -5,21 +5,18 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
+  TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
 import {theme} from '../theme';
 import {MyText} from './MyText';
 import {Neumorphism} from './Neumorphism';
 
-export interface Props {
-  onPress?(event: GestureResponderEvent): void;
-  style?: StyleProp<ViewStyle>;
-}
-
-export const PrimaryButton: FunctionComponent<Props> = ({
+export const PrimaryButton: FunctionComponent<TouchableOpacityProps> = ({
   children,
   onPress,
   style,
+  ...rest
 }) => {
   const [pressed, setPressed] = useState(false);
   return (
@@ -33,8 +30,9 @@ export const PrimaryButton: FunctionComponent<Props> = ({
         onPress={onPress}
         onPressIn={() => setPressed(true)}
         onPressOut={() => setPressed(false)}
-        style={[styles.button, style]}>
-        <MyText style={styles.text}>{children}</MyText>
+        style={[styles.button, style]}
+        {...rest}>
+        {children}
       </TouchableOpacity>
     </Neumorphism>
   );

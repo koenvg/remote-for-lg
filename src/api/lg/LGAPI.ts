@@ -98,7 +98,7 @@ const createSocket = (url: string) => {
 
     const errorHandler = (err: WebSocketErrorEvent) => {
       cleanup();
-      console.error(err);
+      // console.error(err);
       reject(err);
     };
 

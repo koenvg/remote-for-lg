@@ -1,14 +1,14 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
-import {useLGTVapi} from '../../api/lg/LGTVProvider';
-import {PrimaryButton} from '../../components/PrimaryButton';
-import {theme} from '../../theme';
+import {StyleSheet, View} from 'react-native';
+import {useLGTVapi} from 'api/lg/LGTVProvider';
+import {PrimaryButton} from 'components/PrimaryButton';
+import {theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
-import {TV} from '../../services/tvService';
+import {TV} from 'services/tvService';
 import {ArrowControls} from './ArrowControls';
-import {MyText} from '../../components/MyText';
+import {MyText} from 'components/MyText';
 
 export interface Props {
   tv: TV;
@@ -68,7 +68,7 @@ export const Remote: FunctionComponent<Props> = ({}) => {
       </View>
 
       <View style={styles.volumeContainer}>
-        <MyText style={{color: theme.primary[800]}}>Volume</MyText>
+        <MyText style={{color: theme.accent}}>Volume</MyText>
         <Slider
           style={{width: '100%', height: 40}}
           minimumValue={0}
