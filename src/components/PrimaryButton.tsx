@@ -1,15 +1,10 @@
 import React, {FunctionComponent, useState} from 'react';
 import {
-  GestureResponderEvent,
-  StyleProp,
   StyleSheet,
-  Text,
   TouchableOpacity,
   TouchableOpacityProps,
-  ViewStyle,
 } from 'react-native';
 import {theme} from '../theme';
-import {MyText} from './MyText';
 import {Neumorphism} from './Neumorphism';
 
 export const PrimaryButton: FunctionComponent<TouchableOpacityProps> = ({
@@ -21,8 +16,8 @@ export const PrimaryButton: FunctionComponent<TouchableOpacityProps> = ({
   const [pressed, setPressed] = useState(false);
   return (
     <Neumorphism
-      lightColor={theme.primary[100]}
-      darkColor={theme.primary[300]}
+      lightColor={theme.neumorphismLight}
+      darkColor={theme.neumorphismDark}
       style={[styles.container]}
       shapeType={pressed ? 'pressed' : 'flat'}>
       <TouchableOpacity
@@ -50,10 +45,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: 10,
     borderRadius: 9999,
-  },
-  text: {
-    color: theme.primary[800],
-    fontSize: 16,
   },
 });
 

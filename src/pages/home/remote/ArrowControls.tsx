@@ -14,8 +14,8 @@ export const ArrowControls: FunctionComponent<Props> = () => {
   const {api} = useLGTVapi();
   return (
     <Neumorphism
-      lightColor={theme.primary[100]}
-      darkColor={theme.primary[300]}
+      lightColor={theme.neumorphismLight}
+      darkColor={theme.neumorphismDark}
       shapeType={'flat'}
       radius={9999}
       style={{margin: 7}}>
@@ -23,24 +23,24 @@ export const ArrowControls: FunctionComponent<Props> = () => {
         <TransparentButton onPress={() => api?.press('UP')}>
           <MaterialCommunityIcons
             name="chevron-up"
-            color={theme.primary[600]}
-            size={24}
+            color={theme.iconColor}
+            size={theme.iconSize}
           />
         </TransparentButton>
         <View style={styles.middleRow}>
           <TransparentButton onPress={() => api?.press('LEFT')}>
             <MaterialCommunityIcons
               name="chevron-left"
-              color={theme.primary[600]}
-              size={24}
+              color={theme.iconColor}
+              size={theme.iconSize}
             />
           </TransparentButton>
           <TransparentButton onPress={() => api?.click()}>
             <Neumorphism
               radius={999}
               shapeType="basin"
-              lightColor={theme.primary[100]}
-              darkColor={theme.primary[300]}>
+              lightColor={theme.neumorphismLight}
+              darkColor={theme.neumorphismDark}>
               <View style={styles.clickButton}>
                 <MyText style={{fontSize: 18}}>Ok</MyText>
               </View>
@@ -49,16 +49,16 @@ export const ArrowControls: FunctionComponent<Props> = () => {
           <TransparentButton onPress={() => api?.press('RIGHT')}>
             <MaterialCommunityIcons
               name="chevron-right"
-              color={theme.primary[600]}
-              size={24}
+              color={theme.iconColor}
+              size={theme.iconSize}
             />
           </TransparentButton>
         </View>
         <TransparentButton onPress={() => api?.press('DOWN')}>
           <MaterialCommunityIcons
             name="chevron-down"
-            color={theme.primary[600]}
-            size={24}
+            color={theme.iconColor}
+            size={theme.iconSize}
           />
         </TransparentButton>
       </View>

@@ -1,6 +1,6 @@
 import React, {FunctionComponent} from 'react';
 import {StyleSheet, Text, TextProps} from 'react-native';
-import {theme} from '../theme';
+import {colorScheme, theme} from '../theme';
 
 export interface Props {}
 
@@ -12,7 +12,7 @@ MyText.displayName = 'MyText';
 
 const styles = StyleSheet.create({
   text: {
-    color: theme.primary[800],
+    color: colorScheme === 'light' ? theme.primary[800] : theme.primary[100],
     fontFamily: 'Poppins-Medium',
   },
 });

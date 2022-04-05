@@ -8,7 +8,7 @@ import {Home} from './home/Home';
 import {StackParamList} from './navigation';
 import {SearchTV} from './searchTV/SearchDevices';
 import {TV, tvService} from '../services/tvService';
-import {theme} from '../theme';
+import {colorScheme, theme} from '../theme';
 import {Welcome} from './welcome/Welcome';
 
 export interface Props {}
@@ -72,11 +72,20 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={'Home'}
+        initialRouteName={initialRouteName}
         screenOptions={{
-          headerTitleStyle: {fontFamily: 'Poppins-SemiBold'},
+          headerTitleStyle: {
+            fontFamily: 'Poppins-SemiBold',
+            color:
+              colorScheme === 'light' ? theme.primary[800] : theme.primary[200],
+          },
+          headerStyle: {
+            backgroundColor:
+              colorScheme === 'light' ? theme.primary[200] : theme.primary[900],
+          },
           contentStyle: {
-            backgroundColor: theme.primary[200],
+            backgroundColor:
+              colorScheme === 'light' ? theme.primary[200] : theme.primary[800],
           },
         }}>
         <Stack.Screen
@@ -95,7 +104,7 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
           options={{
             headerShown: false,
           }}
-          initialParams={state.type === 'default_tv' ? state.tv : {ip: '123'}}
+          initialParams={state.type === 'default_tv' ? state.tv : undefined}
         />
         <Stack.Screen
           name="AddTV"

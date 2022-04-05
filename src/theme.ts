@@ -1,3 +1,5 @@
+import {Appearance} from 'react-native';
+
 const slate = {
   0: '#ffffff',
   50: '#f8fafc',
@@ -39,9 +41,18 @@ const zinc = {
   800: '#27272a',
   900: '#18181b',
 };
+
+// Make this a hook so you can listen for changes?
+export const colorScheme = Appearance.getColorScheme();
+
+const primary = slate;
 export const theme = {
-  primary: slate,
+  primary,
   red: '#dc2626',
   green: '#16a34a',
   accent: '#6366f1',
+  iconColor: colorScheme === 'light' ? primary[600] : primary[200],
+  iconSize: 24,
+  neumorphismLight: colorScheme === 'light' ? primary[100] : primary[700],
+  neumorphismDark: colorScheme === 'light' ? primary[300] : primary[900],
 };

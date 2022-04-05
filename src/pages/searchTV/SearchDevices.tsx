@@ -9,7 +9,7 @@ import {
   fetchDeviceDescription,
 } from '../../api/networkDiscovery';
 import {MyText} from '../../components/MyText';
-import {theme} from '../../theme';
+import {colorScheme, theme} from '../../theme';
 import {keepFirst} from '../../utils/array-utils';
 import {useNavigation} from '../navigation';
 import {DiscoveredTV} from './types';
@@ -56,6 +56,15 @@ export const SearchTV: FunctionComponent<Props> = () => {
           autoPlay
           loop
           source={searchAnimation}
+          colorFilters={[
+            {
+              keypath: 'searching',
+              color:
+                colorScheme === 'light'
+                  ? theme.primary[400]
+                  : theme.primary[100],
+            },
+          ]}
         />
       </View>
     );
@@ -73,7 +82,9 @@ export const SearchTV: FunctionComponent<Props> = () => {
         <MyText>- Check if you are on the same network as your tv</MyText>
         <Button
           onPress={() => refetch()}
-          color={theme.primary[700]}
+          color={
+            colorScheme === 'light' ? theme.primary[700] : theme.primary[900]
+          }
           title="Retry"
         />
       </View>

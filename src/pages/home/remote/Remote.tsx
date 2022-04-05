@@ -37,8 +37,8 @@ export const Remote: FunctionComponent<Props> = ({}) => {
         <PrimaryButton onPress={() => api?.press('HOME')}>
           <MaterialCommunityIcons
             name="home-outline"
-            color={theme.primary[600]}
-            size={24}
+            color={theme.iconColor}
+            size={theme.iconSize}
           />
         </PrimaryButton>
         <PrimaryButton onPress={() => api?.powerOff()}>
@@ -53,15 +53,15 @@ export const Remote: FunctionComponent<Props> = ({}) => {
           <PrimaryButton onPress={() => api?.press('BACK')}>
             <MaterialCommunityIcons
               name="arrow-u-left-bottom"
-              color={theme.primary[600]}
-              size={24}
+              color={theme.iconColor}
+              size={theme.iconSize}
             />
           </PrimaryButton>
           <PrimaryButton onPress={() => api?.press('EXIT')}>
             <MaterialCommunityIcons
               name="exit-to-app"
-              color={theme.primary[600]}
-              size={24}
+              color={theme.iconColor}
+              size={theme.iconSize}
             />
           </PrimaryButton>
         </View>
