@@ -108,7 +108,8 @@ export const discoverServices = () => {
       setTimeout(() => {
         socket.close();
         resolve(services);
-      }, 4000);
+        // TODO: Don't export this as a promise to waiting becomes the responsibility of the consumer?
+      }, 10000);
     });
 
     socket.on('message', function (msg: Buffer, info: Omit<DeviceInfo, 'mac'>) {
