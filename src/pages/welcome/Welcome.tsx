@@ -1,6 +1,6 @@
 import AnimatedLottieView from 'lottie-react-native';
 import React, {FunctionComponent} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {Button, StyleSheet, Text, View} from 'react-native';
 import {PrimaryButton} from '../../components/PrimaryButton';
 import {theme} from '../../theme';
 // @ts-ignore
@@ -22,16 +22,11 @@ export const Welcome: FunctionComponent<Props> = () => {
         autoPlay
         loop
       />
-      <PrimaryButton
-        style={{backgroundColor: theme.primary[700]}}
-        onPress={() => navigation.replace('SearchTV')}>
-        <Text style={{color: theme.primary[50]}}>Add your first tv</Text>
-        <MaterialCommunityIcons
-          name="chevron-right"
-          color={theme.primary[50]}
-          size={14}
-        />
-      </PrimaryButton>
+      <Button
+        title="Add your first tv"
+        color={theme.primary[700]}
+        onPress={() => navigation.replace('SearchTV')}
+      />
     </View>
   );
 };
