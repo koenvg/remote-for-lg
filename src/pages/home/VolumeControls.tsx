@@ -2,6 +2,7 @@ import React, {FunctionComponent} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {MyText} from '../../components/MyText';
 import {Neumorphism} from '../../components/Neumorphism';
 import {TransparentButton} from '../../components/TransparentButton';
 import {theme} from '../../theme';
@@ -23,7 +24,7 @@ export const VolumeControls: FunctionComponent<Props> = () => {
             size={24}
           />
         </TransparentButton>
-        <Text>Vol</Text>
+        <MyText>Vol</MyText>
         <TransparentButton>
           <MaterialCommunityIcons
             name="volume-minus"

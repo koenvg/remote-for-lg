@@ -5,6 +5,7 @@ import {TransparentButton} from '../../components/TransparentButton';
 import {theme} from '../../theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {MyText} from '../../components/MyText';
 
 export interface Props {}
 
@@ -23,7 +24,7 @@ export const ChannelControls: FunctionComponent<Props> = () => {
             size={24}
           />
         </TransparentButton>
-        <Text>Ch</Text>
+        <MyText>Ch</MyText>
         <TransparentButton>
           <MaterialCommunityIcons
             name="chevron-down"

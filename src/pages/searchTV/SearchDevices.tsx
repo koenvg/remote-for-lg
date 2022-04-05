@@ -7,6 +7,7 @@ import {
   discoverServices,
   fetchDeviceDescription,
 } from '../../api/networkDiscovery';
+import {MyText} from '../../components/MyText';
 import {theme} from '../../theme';
 import {keepFirst} from '../../utils/array-utils';
 import {useNavigation} from '../navigation';
@@ -43,18 +44,18 @@ export const SearchTV: FunctionComponent<Props> = () => {
     navigation.navigate('AddTV', tv);
   };
 
-  if (isFetching) return <Text>Fetching...</Text>;
+  if (isFetching) return <MyText>Fetching...</MyText>;
 
   if (!data) return null;
 
-  if (either.isLeft(data)) return <Text>Error {data.left}</Text>;
+  if (either.isLeft(data)) return <MyText>Error {data.left}</MyText>;
 
   if (data.right.length === 0) {
     return (
       <View style={{margin: 20}}>
-        <Text>Sorry, I can't seem to find your tv.</Text>
-        <Text>- Check if your tv is on and connected to the wifi</Text>
-        <Text>- Check if you are on the same network as your tv</Text>
+        <MyText>Sorry, I can't seem to find your tv.</MyText>
+        <MyText>- Check if your tv is on and connected to the wifi</MyText>
+        <MyText>- Check if you are on the same network as your tv</MyText>
         <Button onPress={() => refetch()} title="Retry" />
       </View>
     );

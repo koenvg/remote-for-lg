@@ -8,6 +8,7 @@ import {
   ViewStyle,
 } from 'react-native';
 import {theme} from '../theme';
+import {MyText} from './MyText';
 import {Neumorphism} from './Neumorphism';
 
 export interface Props {
@@ -33,7 +34,7 @@ export const PrimaryButton: FunctionComponent<Props> = ({
         onPressIn={() => setPressed(true)}
         onPressOut={() => setPressed(false)}
         style={[styles.button, style]}>
-        <Text style={styles.text}>{children}</Text>
+        <MyText style={styles.text}>{children}</MyText>
       </TouchableOpacity>
     </Neumorphism>
   );

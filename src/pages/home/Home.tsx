@@ -1,7 +1,7 @@
 import {useRoute} from '@react-navigation/native';
 import React, {FunctionComponent} from 'react';
-import {Text} from 'react-native';
 import {LGTVProvider, useLGTV} from '../../api/lg/LGTVProvider';
+import {MyText} from '../../components/MyText';
 import {HomeRoute} from '../navigation';
 
 import {Remote} from './Remote';
@@ -13,9 +13,9 @@ export const Home: FunctionComponent<Props> = () => {
   const value = useLGTV(tv);
   const {connected, error} = value;
 
-  if (error) return <Text>{JSON.stringify(error)}</Text>;
+  if (error) return <MyText>{JSON.stringify(error)}</MyText>;
 
-  if (!connected) return <Text>Connecting...</Text>;
+  if (!connected) return <MyText>Connecting...</MyText>;
 
   return (
     <LGTVProvider context={value}>

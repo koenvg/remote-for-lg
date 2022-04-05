@@ -2,9 +2,10 @@ import {useRoute} from '@react-navigation/native';
 import {taskEither} from 'fp-ts';
 import {pipe} from 'fp-ts/lib/function';
 import React, {FunctionComponent, useState} from 'react';
-import {Button, StyleSheet, Text, TextInput, View} from 'react-native';
+import {Button, StyleSheet, TextInput, View} from 'react-native';
 import {useMutation} from 'react-query';
 import {authorizeApp} from '../../api/lg/LGAPI';
+import {MyText} from '../../components/MyText';
 import {tvService} from '../../services/tvService';
 import {theme} from '../../theme';
 import {AddTVRoute, useNavigation} from '../navigation';
@@ -42,13 +43,13 @@ export const AddTV: FunctionComponent<Props> = ({}) => {
   return (
     <View style={styles.container}>
       <View style={styles.formGroup}>
-        <Text>Name: </Text>
+        <MyText>Name: </MyText>
         <TextInput onChangeText={setName} value={name} style={styles.input} />
       </View>
-      <Text style={styles.info}>
+      <MyText style={styles.info}>
         Once you press the button, the app will try to request access from your
         TV. Please press ok on the tv.
-      </Text>
+      </MyText>
 
       <Button
         disabled={isLoading}
@@ -59,14 +60,14 @@ export const AddTV: FunctionComponent<Props> = ({}) => {
 
       <View style={styles.extraInfo}>
         {isLoading ? (
-          <Text style={styles.connectingInfo}>
+          <MyText style={styles.connectingInfo}>
             Please accept the connection request on your tv
-          </Text>
+          </MyText>
         ) : null}
         {isError ? (
-          <Text style={styles.error}>
+          <MyText style={styles.error}>
             Something went wrong authorizing the app.
-          </Text>
+          </MyText>
         ) : null}
       </View>
     </View>

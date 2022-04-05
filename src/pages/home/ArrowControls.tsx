@@ -1,11 +1,12 @@
 import React, {FunctionComponent} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {Neumorphism} from '../../components/Neumorphism';
 import {TransparentButton} from '../../components/TransparentButton';
 import {theme} from '../../theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useLGTVapi} from '../../api/lg/LGTVProvider';
+import {MyText} from '../../components/MyText';
 
 export interface Props {}
 
@@ -41,7 +42,7 @@ export const ArrowControls: FunctionComponent<Props> = () => {
               lightColor={theme.primary[100]}
               darkColor={theme.primary[300]}>
               <View style={styles.clickButton}>
-                <Text style={{fontSize: 18}}>Ok</Text>
+                <MyText style={{fontSize: 18}}>Ok</MyText>
               </View>
             </Neumorphism>
           </TransparentButton>

@@ -73,7 +73,10 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={initialRouteName}
-        screenOptions={{contentStyle: {backgroundColor: theme.primary[200]}}}>
+        screenOptions={{
+          contentStyle: {backgroundColor: theme.primary[200]},
+          headerTitleStyle: {fontFamily: 'Poppins-SemiBold'},
+        }}>
         <Stack.Screen
           name="Welcome"
           component={Welcome}

@@ -8,6 +8,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Slider from '@react-native-community/slider';
 import {TV} from '../../services/tvService';
 import {ArrowControls} from './ArrowControls';
+import {MyText} from '../../components/MyText';
 
 export interface Props {
   tv: TV;
@@ -67,7 +68,7 @@ export const Remote: FunctionComponent<Props> = ({}) => {
       </View>
 
       <View style={styles.volumeContainer}>
-        <Text style={{color: theme.primary[800]}}>Volume</Text>
+        <MyText style={{color: theme.primary[800]}}>Volume</MyText>
         <Slider
           style={{width: '100%', height: 40}}
           minimumValue={0}
