@@ -4,9 +4,10 @@ import {
   NativeStackScreenProps,
 } from '@react-navigation/native-stack';
 import {TV} from '../services/tvService';
-import {DiscoveredTV} from './newDevice/types';
+import {DiscoveredTV} from './searchTV/types';
 
 export type StackParamList = {
+  Welcome: undefined;
   SearchTV: undefined;
   AddTV: DiscoveredTV;
   Home: TV;

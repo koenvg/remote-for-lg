@@ -36,7 +36,7 @@ const discoverTVS = () => {
   );
 };
 
-export const SearchDevices: FunctionComponent<Props> = () => {
+export const SearchTV: FunctionComponent<Props> = () => {
   const {data, isFetching, refetch} = useQuery('devices', discoverTVS());
   const navigation = useNavigation();
   const addTV = (tv: DiscoveredTV) => {
@@ -82,4 +82,4 @@ const styles = StyleSheet.create({
   },
 });
 
-SearchDevices.displayName = 'SearchDevices';
+SearchTV.displayName = 'SearchTV';

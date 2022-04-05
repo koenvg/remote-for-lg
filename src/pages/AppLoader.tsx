@@ -6,9 +6,10 @@ import React, {FunctionComponent, useEffect, useState} from 'react';
 import {AddTV} from './addTV/AddTV';
 import {Home} from './home/Home';
 import {StackParamList} from './navigation';
-import {SearchDevices} from './newDevice/SearchDevices';
+import {SearchTV} from './searchTV/SearchDevices';
 import {TV, tvService} from '../services/tvService';
 import {theme} from '../theme';
+import {Welcome} from './welcome/Welcome';
 
 export interface Props {}
 
@@ -17,6 +18,10 @@ const Stack = createNativeStackNavigator<StackParamList>();
 interface Loading {
   type: 'loading';
 }
+
+interface NoTVS {
+  type: 'no_tvs';
+}
 interface NoDefaultTV {
   type: 'no_default_tv';
 }
@@ -24,7 +29,7 @@ interface DefaultTV {
   type: 'default_tv';
   tv: TV;
 }
-type State = Loading | NoDefaultTV | DefaultTV;
+type State = Loading | NoDefaultTV | DefaultTV | NoTVS;
 
 export const AppLoader: FunctionComponent<Props> = ({}) => {
   const [state, setState] = useState<State>({type: 'loading'});
@@ -34,7 +39,7 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
       tvService.getRegisteredTVs,
       taskEither.map((tvs): State => {
         if (tvs.length === 0) {
-          return {type: 'no_default_tv'};
+          return {type: 'no_tvs'};
         }
 
         const defaultTV = tvs.find(tv => tv.default);
@@ -49,6 +54,17 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
     )();
   }, []);
 
+  const initialRouteName = ((): keyof StackParamList => {
+    switch (state.type) {
+      case 'no_tvs':
+        return 'Welcome';
+      case 'no_default_tv':
+        return 'SearchTV';
+      default:
+        return 'Home';
+    }
+  })();
+
   if (state.type === 'loading') {
     return null;
   }
@@ -56,11 +72,16 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
   return (
     <NavigationContainer>
       <Stack.Navigator
-        initialRouteName={state.type === 'no_default_tv' ? 'SearchTV' : 'Home'}
+        initialRouteName={initialRouteName}
         screenOptions={{contentStyle: {backgroundColor: theme.primary[200]}}}>
         <Stack.Screen
+          name="Welcome"
+          component={Welcome}
+          options={{headerShown: false}}
+        />
+        <Stack.Screen
           name="SearchTV"
-          component={SearchDevices}
+          component={SearchTV}
           options={{title: 'Add new TV'}}
         />
         <Stack.Screen

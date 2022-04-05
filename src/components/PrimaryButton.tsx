@@ -25,14 +25,14 @@ export const PrimaryButton: FunctionComponent<Props> = ({
     <Neumorphism
       lightColor={theme.primary[100]}
       darkColor={theme.primary[300]}
-      style={[styles.container, style]}
+      style={[styles.container]}
       shapeType={pressed ? 'pressed' : 'flat'}>
       <TouchableOpacity
         activeOpacity={1}
         onPress={onPress}
         onPressIn={() => setPressed(true)}
         onPressOut={() => setPressed(false)}
-        style={styles.button}>
+        style={[styles.button, style]}>
         <Text style={styles.text}>{children}</Text>
       </TouchableOpacity>
     </Neumorphism>
@@ -43,13 +43,14 @@ const styles = StyleSheet.create({
   container: {
     display: 'flex',
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'stretch',
   },
   button: {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
     padding: 10,
+    borderRadius: 9999,
   },
   text: {
     color: theme.primary[800],

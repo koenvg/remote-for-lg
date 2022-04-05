@@ -16,6 +16,8 @@
     "@react-navigation/native-stack": "^6.6.1",
     "fast-xml-parser": "^4.0.7",
     "fp-ts": "^2.11.9",
+    "lottie-ios": "3.2.3",
+    "lottie-react-native": "^5.0.1",
     "manda": "^1.0.1",
     "react": "17.0.2",
     "react-native": "0.67.4",
