@@ -90,6 +90,7 @@ export const SearchTV: FunctionComponent<Props> = () => {
       </View>
     );
   }
+
   return (
     <View style={styles.container}>
       {data.right.map(tv => {

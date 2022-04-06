@@ -3,14 +3,22 @@ import {
   StyleSheet,
   TouchableOpacity,
   TouchableOpacityProps,
+  ViewStyle,
 } from 'react-native';
 import {theme} from '../theme';
 import {Neumorphism} from './Neumorphism';
 
-export const PrimaryButton: FunctionComponent<TouchableOpacityProps> = ({
+interface Props extends TouchableOpacityProps {
+  containerStyle?: ViewStyle;
+  radius?: number;
+}
+
+export const PrimaryButton: FunctionComponent<Props> = ({
   children,
   onPress,
   style,
+  containerStyle,
+  radius,
   ...rest
 }) => {
   const [pressed, setPressed] = useState(false);
@@ -18,7 +26,8 @@ export const PrimaryButton: FunctionComponent<TouchableOpacityProps> = ({
     <Neumorphism
       lightColor={theme.neumorphismLight}
       darkColor={theme.neumorphismDark}
-      style={[styles.container]}
+      style={[styles.container, containerStyle]}
+      radius={radius}
       shapeType={pressed ? 'pressed' : 'flat'}>
       <TouchableOpacity
         activeOpacity={1}

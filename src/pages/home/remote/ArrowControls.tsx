@@ -5,13 +5,13 @@ import {TransparentButton} from 'components/TransparentButton';
 import {theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import {useLGTVapi} from 'api/lg/LGTVProvider';
+import {useLGConnected} from 'api/lg/LGTVProvider';
 import {MyText} from 'components/MyText';
 
 export interface Props {}
 
 export const ArrowControls: FunctionComponent<Props> = () => {
-  const {api} = useLGTVapi();
+  const {api} = useLGConnected();
   return (
     <Neumorphism
       lightColor={theme.neumorphismLight}

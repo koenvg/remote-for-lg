@@ -27,6 +27,7 @@ export const AddTV: FunctionComponent<Props> = ({}) => {
           tvService.registerTV({
             clientKey: auth['client-key'],
             ip: tv.info.address,
+            mac: tv.info.mac,
             name,
           }),
         ),

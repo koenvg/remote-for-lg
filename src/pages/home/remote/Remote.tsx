@@ -1,6 +1,6 @@
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
-import {useLGTVapi} from 'api/lg/LGTVProvider';
+import {useLGConnected} from 'api/lg/LGTVProvider';
 import {PrimaryButton} from 'components/PrimaryButton';
 import {theme} from 'theme';
 // @ts-ignore
@@ -15,7 +15,7 @@ export interface Props {
 }
 
 export const Remote: FunctionComponent<Props> = ({}) => {
-  const {api} = useLGTVapi();
+  const {api, turnOff} = useLGConnected();
   const [volume, setVolume] = useState(0);
 
   useEffect(() => {
@@ -41,7 +41,7 @@ export const Remote: FunctionComponent<Props> = ({}) => {
             size={theme.iconSize}
           />
         </PrimaryButton>
-        <PrimaryButton onPress={() => api?.powerOff()}>
+        <PrimaryButton onPress={turnOff}>
           <MaterialCommunityIcons name="power" color={theme.red} size={24} />
         </PrimaryButton>
       </View>

@@ -36,6 +36,60 @@ interface VolumeStatusResponse {
   volumeMax: number;
 }
 
+type URL = string;
+interface AppListingResponse {
+  apps: {
+    defaultWindowType:
+      | 'card'
+      | 'overlay'
+      | 'popup'
+      | 'floating'
+      | 'favoriteshows';
+    installedTime: number;
+    bsImages: string[];
+    uiRevision: string;
+    CPApp: boolean;
+    version: string;
+    appsize: number;
+    vendor: string;
+    miniicon: URL;
+    hasPromotion: boolean;
+    requestedWindowOrientation: string;
+    tileSize: string;
+    largeIcon: string;
+    lockable: boolean;
+    transparent: boolean;
+    icon: URL;
+    checkUpdateOnLaunch: boolean;
+    category: string;
+    launchinnewgroup: boolean;
+    spinnerOnLaunch: boolean;
+    handlesRelaunch: boolean;
+    unmovable: boolean;
+    id: string;
+    inspectable: boolean;
+    inAppSetting: boolean;
+    privilegedJail: boolean;
+    supportQuickStart: boolean;
+    title: string;
+    splashBackground: string;
+    trustLevel: string;
+    visible: boolean;
+    noWindow: boolean;
+    age: number;
+    folderPath: string;
+    deeplinkingParams: string;
+    main: string;
+    removable: boolean;
+    type: string;
+    bgImage: string;
+    iconColor: string;
+    disableBackHistoryAPI: boolean;
+    noSplashOnLaunch: boolean;
+  }[];
+  returnValue: true;
+}
+
 const sendRequest = <T = undefined>(
   data: Message,
   socket: WebSocket,
@@ -98,7 +152,6 @@ const createSocket = (url: string) => {
 
     const errorHandler = (err: WebSocketErrorEvent) => {
       cleanup();
-      // console.error(err);
       reject(err);
     };
 
@@ -261,5 +314,29 @@ export class LGAPI {
   async press(button: Button) {
     const p = await this.getPointerSocket();
     p.send(`type:button\nname:${button}\n\n\n`);
+  }
+
+  async listApps() {
+    const res = await sendRequest<AppListingResponse>(
+      {
+        type: 'request',
+        uri: 'ssap://com.webos.applicationManager/listApps',
+      },
+      this.socket,
+    );
+    return res.payload.apps;
+  }
+
+  async launchApp(app: string) {
+    return sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://system.launcher/launch',
+        payload: {
+          id: app,
+        },
+      },
+      this.socket,
+    );
   }
 }

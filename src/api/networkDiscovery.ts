@@ -4,20 +4,7 @@ import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 import {XMLParser} from 'fast-xml-parser';
 import {flow, pipe} from 'fp-ts/lib/function';
 import {option, readonlyNonEmptyArray, record, string} from 'fp-ts';
-
-const send = (
-  socket: UdpSocket,
-  message: Buffer,
-  ip: string = '239.255.255.250',
-  port: number = 1900,
-): Promise<void> => {
-  return new Promise((resolve, reject) => {
-    socket.send(message, 0, message.length, port, ip, function (err) {
-      if (err) reject(err);
-      else resolve();
-    });
-  });
-};
+import {udpService} from './udp';
 
 // ssdp:all
 // urn:schemas-upnp-org:device:MediaRenderer:1
@@ -36,7 +23,7 @@ const broadcastSsdp = (
       'USER-AGENT: UDAP/2.0\r\n' +
       '\r\n',
   );
-  return send(socket, query, ip, port);
+  return udpService.send(socket, query, ip, port);
 };
 
 export interface SsdpResponse {
@@ -99,7 +86,7 @@ function extractMAC(ssdp: SsdpResponse) {
 
 export const discoverServices = () => {
   return new Promise<Service[]>((resolve, reject) => {
-    const socket = dgram.createSocket({type: 'udp4', debug: true});
+    const socket = dgram.createSocket({type: 'udp4'});
     socket.bind(12345);
     const services: Service[] = [];
 
