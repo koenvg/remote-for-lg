@@ -1,6 +1,5 @@
-import dgram from 'react-native-udp';
+import {UdpSocket} from 'react-native-udp';
 import {Buffer} from 'buffer';
-import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
 import {XMLParser} from 'fast-xml-parser';
 import {flow, pipe} from 'fp-ts/lib/function';
 import {option, readonlyNonEmptyArray, record, string} from 'fp-ts';
@@ -84,21 +83,10 @@ function extractMAC(ssdp: SsdpResponse) {
   );
 }
 
-export const discoverServices = () => {
+export const discoverServices = async () => {
+  const socket = await udpService.createSocket();
+  const services: Service[] = [];
   return new Promise<Service[]>((resolve, reject) => {
-    const socket = dgram.createSocket({type: 'udp4'});
-    socket.bind(12345);
-    const services: Service[] = [];
-
-    socket.once('listening', () => {
-      broadcastSsdp(socket, '239.255.255.250', 1900);
-      setTimeout(() => {
-        socket.close();
-        resolve(services);
-        // TODO: Don't export this as a promise to waiting becomes the responsibility of the consumer?
-      }, 10000);
-    });
-
     socket.on('message', function (msg: Buffer, info: Omit<DeviceInfo, 'mac'>) {
       const response = parseMessage(msg);
       services.push({
@@ -113,7 +101,15 @@ export const discoverServices = () => {
     socket.on('error', error => {
       console.error(error);
       reject(error);
+      socket.close();
     });
+
+    broadcastSsdp(socket, '239.255.255.250', 1900);
+    setTimeout(() => {
+      socket.close();
+      resolve(services);
+      // TODO: Don't export this as a promise to waiting becomes the responsibility of the consumer?
+    }, 10000);
   });
 };
 

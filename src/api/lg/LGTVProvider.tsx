@@ -121,7 +121,6 @@ const createTVMachine = (myTv: {
     {
       actions: {
         turningOff: ({api}) => {
-          api?.socket.close();
           api?.powerOff();
         },
       },

@@ -1,4 +1,5 @@
-import UdpSocket from 'react-native-udp/lib/types/UdpSocket';
+import {UdpSocket} from 'react-native-udp';
+import dgram from 'react-native-udp';
 
 const send = (
   socket: UdpSocket,
@@ -13,6 +14,31 @@ const send = (
     });
   });
 };
+
+interface Options {
+  broadcast?: boolean;
+}
+function createSocket({broadcast}: Options = {}) {
+  return new Promise<UdpSocket>((resolve, reject) => {
+    const handleSocketErrors = (err: any) => {
+      socket.close();
+      reject(err);
+    };
+    const socket = dgram
+      .createSocket({type: 'udp4'})
+      .on('error', handleSocketErrors)
+      .once('bound', () => {
+        if (broadcast) socket.setBroadcast(true);
+        socket.startReceiving();
+      })
+      .once('listening', function () {
+        socket.removeListener('error', handleSocketErrors);
+        resolve(socket);
+      });
+    socket.bind();
+  });
+}
 export const udpService = {
   send,
+  createSocket,
 };
