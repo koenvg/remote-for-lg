@@ -3,13 +3,14 @@ import {MyTabBar} from 'components/MyTabBar';
 import React, {FunctionComponent} from 'react';
 import {colorScheme, theme} from 'theme';
 import {Remote} from './remote/Remote';
-import {VolumeControls} from './remote/VolumeControls';
 import {TVApps} from './tvApps/TVApps';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {HomeParamList} from 'pages/navigation';
+import {GeneralSettings} from './settings/GeneralSettings';
 
 export interface Props {}
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<HomeParamList>();
 export const ConnectedState: FunctionComponent<Props> = () => {
   return (
     <Tab.Navigator
@@ -41,7 +42,7 @@ export const ConnectedState: FunctionComponent<Props> = () => {
       />
       <Tab.Screen
         name="Settings"
-        component={VolumeControls}
+        component={GeneralSettings}
         options={{
           tabBarLabel: ({color}) => (
             <MaterialCommunityIcons name="cog" color={color} size={18} />

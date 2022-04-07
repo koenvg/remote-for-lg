@@ -98,7 +98,11 @@ export const SearchTV: FunctionComponent<Props> = () => {
           <View key={tv.info.address}>
             <Button
               title={tv.description.friendlyName}
-              color={theme.primary[700]}
+              color={
+                colorScheme === 'light'
+                  ? theme.primary[700]
+                  : theme.primary[900]
+              }
               onPress={() => addTV(tv)}
             />
           </View>

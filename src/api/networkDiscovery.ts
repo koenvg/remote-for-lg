@@ -85,10 +85,10 @@ function extractMAC(ssdp: SsdpResponse) {
 
 export const discoverServices = async () => {
   const socket = await udpService.createSocket();
-  const services: Service[] = [];
   return new Promise<Service[]>((resolve, reject) => {
-    socket.on('message', function (msg: Buffer, info: Omit<DeviceInfo, 'mac'>) {
-      const response = parseMessage(msg);
+    const services: Service[] = [];
+    socket.on('message', function (msg: string, info: Omit<DeviceInfo, 'mac'>) {
+      const response = parseMessage(Buffer.from(msg));
       services.push({
         info: {
           ...info,
@@ -104,10 +104,14 @@ export const discoverServices = async () => {
       socket.close();
     });
 
-    broadcastSsdp(socket, '239.255.255.250', 1900);
+    const interval = setInterval(
+      () => broadcastSsdp(socket, '239.255.255.250', 1900),
+      500,
+    );
     setTimeout(() => {
-      socket.close();
       resolve(services);
+      clearInterval(interval);
+      socket.close();
       // TODO: Don't export this as a promise to waiting becomes the responsibility of the consumer?
     }, 10000);
   });

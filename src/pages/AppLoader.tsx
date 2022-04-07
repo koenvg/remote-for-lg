@@ -10,6 +10,8 @@ import {SearchTV} from './searchTV/SearchDevices';
 import {TV, tvService} from '../services/tvService';
 import {colorScheme, theme} from '../theme';
 import {Welcome} from './welcome/Welcome';
+import {GeneralSettings} from './home/settings/GeneralSettings';
+import {TVSettings} from './home/settings/TVSettings';
 
 export interface Props {}
 
@@ -113,6 +115,16 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
             presentation: 'modal',
             title: `Add ${route.params.description.friendlyName}`,
           })}
+        />
+        <Stack.Screen
+          name="GeneralSettings"
+          component={GeneralSettings}
+          options={{title: 'Settings'}}
+        />
+        <Stack.Screen
+          name="TVSettings"
+          component={TVSettings}
+          options={{title: 'My registered tvs'}}
         />
       </Stack.Navigator>
     </NavigationContainer>

@@ -54,7 +54,9 @@ export const AddTV: FunctionComponent<Props> = ({}) => {
 
       <Button
         disabled={isLoading}
-        color={theme.primary[600]}
+        color={
+          colorScheme === 'light' ? theme.primary[700] : theme.primary[900]
+        }
         title="Authorize and save"
         onPress={() => mutate()}
       />
