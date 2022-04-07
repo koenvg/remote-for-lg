@@ -34,21 +34,55 @@ const registerTV = (tv: Omit<TV, 'default'>) => {
   return pipe(
     getRegisteredTVs,
     taskEither.map(readonlyArray.some(isDefaultTV)),
-    taskEither.chain(hasDefault => {
-      const toRegister: TV = {...tv, default: !hasDefault};
-      return pipe(
-        taskEither.tryCatch(
-          () => AsyncStorage.setItem(tv.name, JSON.stringify(toRegister)),
-          e =>
-            new Error('Something went wrong saving the TV' + JSON.stringify(e)),
-        ),
-        taskEither.map(() => toRegister),
-      );
-    }),
+    taskEither.map(hasDefault => ({...tv, default: !hasDefault})),
+    taskEither.chain(save),
   );
 };
+
+function saveAll(tvs: ReadonlyArray<TV>) {
+  return pipe(
+    tvs,
+    readonlyArray.map(tv => [tv.name, JSON.stringify(tv)] as const),
+    keyPairs =>
+      taskEither.tryCatch(
+        () => AsyncStorage.multiSet(keyPairs as any),
+        e =>
+          new Error('Something went wrong saving the TVs' + JSON.stringify(e)),
+      ),
+  );
+}
+
+function save(tv: TV) {
+  return pipe(
+    taskEither.tryCatch(
+      () => AsyncStorage.setItem(tv.name, JSON.stringify(tv)),
+      e => new Error('Something went wrong saving the TV' + JSON.stringify(e)),
+    ),
+    taskEither.map(() => tv),
+  );
+}
+
+function setDefaultTV(tv: TV) {
+  return pipe(
+    getRegisteredTVs,
+    taskEither.map(
+      readonlyArray.map(registered => ({...registered, default: false})),
+    ),
+    taskEither.chain(saveAll),
+    taskEither.chain(() => save({...tv, default: true})),
+  );
+}
+
+function deleteTV(tv: TV) {
+  return taskEither.tryCatch(
+    () => AsyncStorage.removeItem(tv.name),
+    e => new Error('Something went wrong deleting the TV' + JSON.stringify(e)),
+  );
+}
 
 export const tvService = {
   registerTV,
   getRegisteredTVs,
+  setDefaultTV,
+  deleteTV,
 };

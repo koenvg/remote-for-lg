@@ -4,8 +4,8 @@ import {TransparentButton} from 'components/TransparentButton';
 import {either} from 'fp-ts';
 import React, {FunctionComponent} from 'react';
 import {Button, ScrollView, StyleSheet, View} from 'react-native';
-import {useQuery} from 'react-query';
-import {tvService} from 'services/tvService';
+import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {TV, tvService} from 'services/tvService';
 import {colorScheme, theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -15,7 +15,29 @@ export interface Props {}
 
 export const TVSettings: FunctionComponent<Props> = () => {
   const navigation = useNavigation();
+  const queryClient = useQueryClient();
   const {data} = useQuery('tvs', tvService.getRegisteredTVs);
+
+  const {mutateAsync: updateDefault} = useMutation<void, unknown, TV>(
+    'updateDefault',
+    {
+      mutationFn: async tv => {
+        await tvService.setDefaultTV(tv)();
+      },
+      onSuccess: () => {
+        queryClient.invalidateQueries('tvs');
+      },
+    },
+  );
+
+  const {mutateAsync: deleteTV} = useMutation<void, unknown, TV>('deleteTV', {
+    mutationFn: async tv => {
+      await tvService.deleteTV(tv)();
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries('tvs');
+    },
+  });
 
   if (!data) return null;
   if (either.isLeft(data)) return null;
@@ -36,11 +58,11 @@ export const TVSettings: FunctionComponent<Props> = () => {
                 {tv.default ? (
                   <MyText style={{color: theme.accent}}>Default</MyText>
                 ) : (
-                  <TransparentButton>
+                  <TransparentButton onPress={() => updateDefault(tv)}>
                     <MyText>Make default</MyText>
                   </TransparentButton>
                 )}
-                <TransparentButton>
+                <TransparentButton onPress={() => deleteTV(tv)}>
                   <MaterialCommunityIcons
                     name="delete"
                     color={theme.iconColor}
@@ -67,11 +89,12 @@ TVSettings.displayName = 'TVSettings';
 
 const styles = StyleSheet.create({
   tv: {
-    paddingVertical: 20,
     paddingHorizontal: 30,
     display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
+    height: 70,
   },
   container: {
     flex: 1,
