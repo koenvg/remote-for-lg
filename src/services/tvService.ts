@@ -10,11 +10,18 @@ export interface TV {
   mac?: string;
 }
 
+const tvKeyPrefix = 'tv_';
+
+function createKeyForTV(tv: TV) {
+  return `${tvKeyPrefix}${tv.name}`;
+}
+
 const getRegisteredTVs = pipe(
   taskEither.tryCatch(
     () => AsyncStorage.getAllKeys(),
     e => new Error(JSON.stringify(e)),
   ),
+  taskEither.map(readonlyArray.filter(key => key.startsWith(tvKeyPrefix))),
   taskEither.chain(tvs =>
     taskEither.tryCatch(
       () => AsyncStorage.multiGet(tvs as any),
@@ -42,7 +49,7 @@ const registerTV = (tv: Omit<TV, 'default'>) => {
 function saveAll(tvs: ReadonlyArray<TV>) {
   return pipe(
     tvs,
-    readonlyArray.map(tv => [tv.name, JSON.stringify(tv)] as const),
+    readonlyArray.map(tv => [createKeyForTV(tv), JSON.stringify(tv)] as const),
     keyPairs =>
       taskEither.tryCatch(
         () => AsyncStorage.multiSet(keyPairs as any),
@@ -55,7 +62,7 @@ function saveAll(tvs: ReadonlyArray<TV>) {
 function save(tv: TV) {
   return pipe(
     taskEither.tryCatch(
-      () => AsyncStorage.setItem(tv.name, JSON.stringify(tv)),
+      () => AsyncStorage.setItem(createKeyForTV(tv), JSON.stringify(tv)),
       e => new Error('Something went wrong saving the TV' + JSON.stringify(e)),
     ),
     taskEither.map(() => tv),
