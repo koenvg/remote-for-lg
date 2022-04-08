@@ -88,7 +88,6 @@ export const ThemeProvider: FunctionComponent = ({children}) => {
   >();
 
   function changeColorScheme(scheme: 'light' | 'dark') {
-    console.log('SETTING STATE');
     setColorScheme(scheme);
     AsyncStorage.setItem(keyColorScheme, scheme);
   }

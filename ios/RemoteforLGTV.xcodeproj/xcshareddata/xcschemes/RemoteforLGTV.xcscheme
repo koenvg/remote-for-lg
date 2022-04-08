@@ -15,9 +15,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-               BuildableName = "universalRemote.app"
-               BlueprintName = "universalRemote"
-               ReferencedContainer = "container:universalRemote.xcodeproj">
+               BuildableName = "RemoteforLGTV.app"
+               BlueprintName = "RemoteforLGTV"
+               ReferencedContainer = "container:RemoteforLGTV.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -33,9 +33,9 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "00E356ED1AD99517003FC87E"
-               BuildableName = "universalRemoteTests.xctest"
-               BlueprintName = "universalRemoteTests"
-               ReferencedContainer = "container:universalRemote.xcodeproj">
+               BuildableName = "RemoteforLGTVTests.xctest"
+               BlueprintName = "RemoteforLGTVTests"
+               ReferencedContainer = "container:RemoteforLGTV.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -55,9 +55,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "universalRemote.app"
-            BlueprintName = "universalRemote"
-            ReferencedContainer = "container:universalRemote.xcodeproj">
+            BuildableName = "RemoteforLGTV.app"
+            BlueprintName = "RemoteforLGTV"
+            ReferencedContainer = "container:RemoteforLGTV.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </LaunchAction>
@@ -72,9 +72,9 @@
          <BuildableReference
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "13B07F861A680F5B00A75B9A"
-            BuildableName = "universalRemote.app"
-            BlueprintName = "universalRemote"
-            ReferencedContainer = "container:universalRemote.xcodeproj">
+            BuildableName = "RemoteforLGTV.app"
+            BlueprintName = "RemoteforLGTV"
+            ReferencedContainer = "container:RemoteforLGTV.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
    </ProfileAction>

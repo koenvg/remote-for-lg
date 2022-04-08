@@ -37,8 +37,6 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
   const [state, setState] = useState<State>({type: 'loading'});
   const {theme, colorScheme} = useMyTheme();
 
-  console.log(colorScheme);
-
   useEffect(() => {
     pipe(
       tvService.getRegisteredTVs,
