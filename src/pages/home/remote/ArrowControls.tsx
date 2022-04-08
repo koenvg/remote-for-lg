@@ -2,16 +2,17 @@ import React, {FunctionComponent} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {Neumorphism} from 'components/Neumorphism';
 import {TransparentButton} from 'components/TransparentButton';
-import {theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useLGConnected} from 'api/lg/LGTVProvider';
 import {MyText} from 'components/MyText';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 
 export const ArrowControls: FunctionComponent<Props> = () => {
   const {api} = useLGConnected();
+  const {theme} = useMyTheme();
   return (
     <Neumorphism
       lightColor={theme.neumorphismLight}

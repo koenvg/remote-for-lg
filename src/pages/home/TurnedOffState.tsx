@@ -1,29 +1,29 @@
 import {PrimaryButton} from 'components/PrimaryButton';
 import React, {FunctionComponent} from 'react';
-import {StyleSheet, Text, View} from 'react-native';
+import {StyleSheet, View} from 'react-native';
 import {TV} from 'services/tvService';
-import {colorScheme, theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from 'pages/navigation';
+import {useMyTheme} from 'theme';
+import {MyText} from 'components/MyText';
 
 export interface Props {
   tv: TV;
   turnOn: () => void;
 }
 
-const color = colorScheme === 'light' ? theme.primary[800] : theme.primary[200];
-
 export const TurnedOffState: FunctionComponent<Props> = ({tv, turnOn}) => {
   const navigation = useNavigation();
+  const {theme} = useMyTheme();
   return (
     <View style={styles.container}>
       <PrimaryButton
         containerStyle={styles.settings}
         onPress={() => navigation.navigate('GeneralSettings')}>
-        <MaterialCommunityIcons name="cog" color={color} size={18} />
+        <MaterialCommunityIcons name="cog" color={theme.iconColor} size={18} />
       </PrimaryButton>
-      <Text style={styles.header}>{tv.name} is turned off</Text>
+      <MyText style={styles.header}>{tv.name} is turned off</MyText>
       {tv.mac ? (
         <PrimaryButton onPress={turnOn} radius={9999}>
           <MaterialCommunityIcons name="power" color={theme.green} size={150} />

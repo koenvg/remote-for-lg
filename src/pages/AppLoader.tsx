@@ -8,10 +8,10 @@ import {Home} from './home/Home';
 import {StackParamList} from './navigation';
 import {SearchTV} from './searchTV/SearchDevices';
 import {TV, tvService} from '../services/tvService';
-import {colorScheme, theme} from '../theme';
 import {Welcome} from './welcome/Welcome';
 import {GeneralSettings} from './home/settings/GeneralSettings';
 import {TVSettings} from './home/settings/TVSettings';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 
@@ -35,6 +35,9 @@ type State = Loading | NoDefaultTV | DefaultTV | NoTVS;
 
 export const AppLoader: FunctionComponent<Props> = ({}) => {
   const [state, setState] = useState<State>({type: 'loading'});
+  const {theme, colorScheme} = useMyTheme();
+
+  console.log(colorScheme);
 
   useEffect(() => {
     pipe(
@@ -67,27 +70,24 @@ export const AppLoader: FunctionComponent<Props> = ({}) => {
     }
   })();
 
-  if (state.type === 'loading') {
+  if (state.type === 'loading' || !colorScheme) {
     return null;
   }
-
   return (
     <NavigationContainer>
       <Stack.Navigator
         initialRouteName={initialRouteName}
         screenOptions={{
-          headerTintColor:
-            colorScheme === 'light' ? theme.primary[800] : theme.primary[100],
+          headerTintColor: theme.textColor,
           headerTitleStyle: {
             fontFamily: 'Poppins-SemiBold',
           },
           headerStyle: {
             backgroundColor:
-              colorScheme === 'light' ? theme.primary[200] : theme.primary[900],
+              colorScheme === 'light' ? theme.primary[50] : theme.primary[900],
           },
           contentStyle: {
-            backgroundColor:
-              colorScheme === 'light' ? theme.primary[200] : theme.primary[800],
+            backgroundColor: theme.background,
           },
         }}>
         <Stack.Screen

@@ -5,11 +5,12 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {MyText} from 'components/MyText';
 import {Neumorphism} from 'components/Neumorphism';
 import {TransparentButton} from 'components/TransparentButton';
-import {theme} from 'theme';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 
 export const VolumeControls: FunctionComponent<Props> = () => {
+  const {theme} = useMyTheme();
   return (
     <Neumorphism
       lightColor={theme.primary[100]}

@@ -1,23 +1,24 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MyTabBar} from 'components/MyTabBar';
 import React, {FunctionComponent} from 'react';
-import {colorScheme, theme} from 'theme';
+
 import {Remote} from './remote/Remote';
 import {TVApps} from './tvApps/TVApps';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {HomeParamList} from 'pages/navigation';
 import {GeneralSettings} from './settings/GeneralSettings';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 const Tab = createBottomTabNavigator<HomeParamList>();
 export const ConnectedState: FunctionComponent<Props> = () => {
+  const {theme} = useMyTheme();
   return (
     <Tab.Navigator
       tabBar={props => <MyTabBar {...props} />}
       sceneContainerStyle={{
-        backgroundColor:
-          colorScheme === 'light' ? theme.primary[200] : theme.primary[800],
+        backgroundColor: theme.background,
       }}
       screenOptions={{
         headerShown: false,

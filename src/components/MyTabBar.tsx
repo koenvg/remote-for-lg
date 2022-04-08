@@ -1,7 +1,8 @@
 import {BottomTabBarProps} from '@react-navigation/bottom-tabs';
 import React, {FunctionComponent} from 'react';
 import {StyleSheet, Text, View} from 'react-native';
-import {colorScheme, theme} from '../theme';
+import {useMyTheme} from 'theme';
+
 import {PrimaryButton} from './PrimaryButton';
 
 export interface Props {}
@@ -11,8 +12,9 @@ export const MyTabBar: FunctionComponent<BottomTabBarProps> = ({
   descriptors,
   navigation,
 }) => {
+  const {theme} = useMyTheme();
   return (
-    <View style={styles.container}>
+    <View style={[styles.container, {backgroundColor: theme.background}]}>
       {state.routes.map((route, index) => {
         const {options} = descriptors[route.key];
         const label =
@@ -44,11 +46,7 @@ export const MyTabBar: FunctionComponent<BottomTabBarProps> = ({
           });
         };
 
-        const color = isFocused
-          ? theme.accent
-          : colorScheme === 'light'
-          ? theme.primary[800]
-          : theme.primary[200];
+        const color = isFocused ? theme.accent : theme.textColor;
 
         return (
           <PrimaryButton
@@ -77,8 +75,7 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     marginVertical: 20,
-    backgroundColor:
-      colorScheme === 'light' ? theme.primary[200] : theme.primary[800],
+
     alignItems: 'center',
     justifyContent: 'space-evenly',
   },

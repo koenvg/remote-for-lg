@@ -2,13 +2,13 @@ import React, {FunctionComponent, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useLGConnected} from 'api/lg/LGTVProvider';
 import {PrimaryButton} from 'components/PrimaryButton';
-import {theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
 import {TV} from 'services/tvService';
 import {ArrowControls} from './ArrowControls';
 import {MyText} from 'components/MyText';
+import {useMyTheme} from 'theme';
 
 export interface Props {
   tv: TV;
@@ -17,6 +17,7 @@ export interface Props {
 export const Remote: FunctionComponent<Props> = ({}) => {
   const {api, turnOff} = useLGConnected();
   const [volume, setVolume] = useState(0);
+  const {theme} = useMyTheme();
 
   useEffect(() => {
     const fn = async () => {

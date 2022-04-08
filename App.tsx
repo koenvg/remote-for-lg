@@ -10,6 +10,7 @@
 
 import React from 'react';
 import {QueryClient, QueryClientProvider} from 'react-query';
+import {ThemeProvider} from 'theme';
 import {AppLoader} from './src/pages/AppLoader';
 
 const queryClient = new QueryClient();
@@ -17,7 +18,9 @@ const queryClient = new QueryClient();
 const App = () => {
   return (
     <QueryClientProvider client={queryClient}>
-      <AppLoader />
+      <ThemeProvider>
+        <AppLoader />
+      </ThemeProvider>
     </QueryClientProvider>
   );
 };

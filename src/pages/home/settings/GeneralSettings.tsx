@@ -2,14 +2,15 @@ import {MyText} from 'components/MyText';
 import {useNavigation} from 'pages/navigation';
 import React, {FunctionComponent} from 'react';
 import {StyleSheet, Switch, TouchableOpacity, View} from 'react-native';
-import {colorScheme, theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 
 export const GeneralSettings: FunctionComponent<Props> = () => {
   const navigation = useNavigation();
+  const {theme, colorScheme, changeColorScheme} = useMyTheme();
 
   return (
     <View style={styles.container}>
@@ -26,10 +27,14 @@ export const GeneralSettings: FunctionComponent<Props> = () => {
       <View style={styles.setting}>
         <MyText>Dark mode</MyText>
         <Switch
-          trackColor={{false: '#767577', true: '#81b0ff'}}
-          thumbColor={colorScheme === 'dark' ? theme.accent : '#f4f3f4'}
+          trackColor={{false: theme.primary[300], true: theme.primary[500]}}
+          thumbColor={
+            colorScheme === 'dark' ? theme.accent : theme.primary[400]
+          }
           ios_backgroundColor={theme.primary[600]}
-          // onValueChange={}
+          onValueChange={value =>
+            value ? changeColorScheme('dark') : changeColorScheme('light')
+          }
           value={colorScheme === 'dark'}
         />
       </View>

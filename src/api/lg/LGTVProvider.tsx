@@ -83,7 +83,7 @@ const createTVMachine = (myTv: {
         },
         connected: {
           on: {
-            CONNECTION_LOST: 'connecting',
+            CONNECTION_LOST: 'disconnected',
             DISCONNECT: 'disconnected',
             TURN_OFF: {
               actions: ['turningOff'],
@@ -133,13 +133,6 @@ export const useLGTV = (tv: {ip: string; clientKey: string}): LGContext => {
   const [state, dispatch] = useMachine(tvMachine);
 
   const appState = useAppState();
-
-  useEffect(() => {
-    if (appState !== 'active' && state.matches('connected')) {
-      dispatch('DISCONNECT');
-      state.context.api.close();
-    }
-  }, [appState, state, dispatch]);
 
   useEffect(() => {
     if (appState === 'active' && state.matches('disconnected')) {

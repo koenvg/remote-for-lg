@@ -6,16 +6,17 @@ import React, {FunctionComponent} from 'react';
 import {Button, ScrollView, StyleSheet, View} from 'react-native';
 import {useMutation, useQuery, useQueryClient} from 'react-query';
 import {TV, tvService} from 'services/tvService';
-import {colorScheme, theme} from 'theme';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from 'pages/navigation';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 
 export const TVSettings: FunctionComponent<Props> = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
+  const {theme} = useMyTheme();
   const {data} = useQuery('tvs', tvService.getRegisteredTVs);
 
   const {mutateAsync: updateDefault} = useMutation<void, unknown, TV>(
@@ -77,9 +78,7 @@ export const TVSettings: FunctionComponent<Props> = () => {
       <Button
         title="Add tv"
         onPress={() => navigation.navigate('SearchTV')}
-        color={
-          colorScheme === 'light' ? theme.primary[700] : theme.primary[900]
-        }
+        color={theme.button.background}
       />
     </View>
   );

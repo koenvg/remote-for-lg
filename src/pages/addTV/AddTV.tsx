@@ -4,15 +4,17 @@ import {pipe} from 'fp-ts/lib/function';
 import React, {FunctionComponent, useState} from 'react';
 import {Button, StyleSheet, TextInput, View} from 'react-native';
 import {useMutation} from 'react-query';
+import {useMyTheme} from 'theme';
 import {authorizeApp} from '../../api/lg/LGAPI';
 import {MyText} from '../../components/MyText';
 import {tvService} from '../../services/tvService';
-import {colorScheme, theme} from '../../theme';
+
 import {AddTVRoute, useNavigation} from '../navigation';
 
 export interface Props {}
 
 export const AddTV: FunctionComponent<Props> = ({}) => {
+  const {theme} = useMyTheme();
   const {params: tv} = useRoute<AddTVRoute['route']>();
   const [name, setName] = useState(tv.description.friendlyName);
   const navigation = useNavigation();
@@ -45,7 +47,11 @@ export const AddTV: FunctionComponent<Props> = ({}) => {
     <View style={styles.container}>
       <View style={styles.formGroup}>
         <MyText>Name: </MyText>
-        <TextInput onChangeText={setName} value={name} style={styles.input} />
+        <TextInput
+          onChangeText={setName}
+          value={name}
+          style={[styles.input, theme.input]}
+        />
       </View>
       <MyText style={styles.info}>
         Once you press the button, the app will try to request access from your
@@ -54,9 +60,7 @@ export const AddTV: FunctionComponent<Props> = ({}) => {
 
       <Button
         disabled={isLoading}
-        color={
-          colorScheme === 'light' ? theme.primary[700] : theme.primary[900]
-        }
+        color={theme.button.background}
         title="Authorize and save"
         onPress={() => mutate()}
       />
@@ -94,8 +98,6 @@ const styles = StyleSheet.create({
     marginVertical: 10,
   },
   input: {
-    borderColor:
-      colorScheme === 'light' ? theme.primary[800] : theme.primary[200],
     borderWidth: 1,
     paddingHorizontal: 10,
     paddingVertical: 4,

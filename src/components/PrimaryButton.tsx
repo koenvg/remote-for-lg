@@ -5,7 +5,7 @@ import {
   TouchableOpacityProps,
   ViewStyle,
 } from 'react-native';
-import {theme} from '../theme';
+import {useMyTheme} from 'theme';
 import {Neumorphism} from './Neumorphism';
 
 interface Props extends TouchableOpacityProps {
@@ -21,6 +21,7 @@ export const PrimaryButton: FunctionComponent<Props> = ({
   radius,
   ...rest
 }) => {
+  const {theme} = useMyTheme();
   const [pressed, setPressed] = useState(false);
   return (
     <Neumorphism

@@ -1,14 +1,16 @@
 import AnimatedLottieView from 'lottie-react-native';
 import React, {FunctionComponent} from 'react';
 import {Button, StyleSheet, View} from 'react-native';
+import {useMyTheme} from 'theme';
 import {MyText} from '../../components/MyText';
-import {colorScheme, theme} from '../../theme';
+
 import {useNavigation} from '../navigation';
 
 export interface Props {}
 
 export const Welcome: FunctionComponent<Props> = () => {
   const navigation = useNavigation();
+  const {theme} = useMyTheme();
   return (
     <View style={styles.container}>
       <MyText style={styles.header}>
@@ -22,9 +24,7 @@ export const Welcome: FunctionComponent<Props> = () => {
       />
       <Button
         title="Add your first tv"
-        color={
-          colorScheme === 'light' ? theme.primary[700] : theme.primary[900]
-        }
+        color={theme.button.background}
         onPress={() => navigation.replace('SearchTV')}
       />
     </View>

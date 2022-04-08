@@ -9,11 +9,12 @@ import {
   fetchDeviceDescription,
 } from '../../api/networkDiscovery';
 import {MyText} from '../../components/MyText';
-import {colorScheme, theme} from '../../theme';
+
 import {keepFirst} from '../../utils/array-utils';
 import {useNavigation} from '../navigation';
 import {DiscoveredTV} from './types';
 import searchAnimation from './searchDevices.json';
+import {useMyTheme} from 'theme';
 
 export interface Props {}
 
@@ -43,6 +44,7 @@ const discoverTVS = () => {
 export const SearchTV: FunctionComponent<Props> = () => {
   const {data, isFetching, refetch} = useQuery('devices', discoverTVS());
   const navigation = useNavigation();
+  const {theme, colorScheme} = useMyTheme();
   const addTV = (tv: DiscoveredTV) => {
     navigation.navigate('AddTV', tv);
   };
@@ -82,9 +84,7 @@ export const SearchTV: FunctionComponent<Props> = () => {
         <MyText>- Check if you are on the same network as your tv</MyText>
         <Button
           onPress={() => refetch()}
-          color={
-            colorScheme === 'light' ? theme.primary[700] : theme.primary[900]
-          }
+          color={theme.button.background}
           title="Retry"
         />
       </View>
@@ -98,11 +98,7 @@ export const SearchTV: FunctionComponent<Props> = () => {
           <View key={tv.info.address}>
             <Button
               title={tv.description.friendlyName}
-              color={
-                colorScheme === 'light'
-                  ? theme.primary[700]
-                  : theme.primary[900]
-              }
+              color={theme.button.background}
               onPress={() => addTV(tv)}
             />
           </View>
