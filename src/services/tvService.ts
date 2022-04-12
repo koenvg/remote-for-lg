@@ -82,7 +82,7 @@ function setDefaultTV(tv: TV) {
 
 function deleteTV(tv: TV) {
   return taskEither.tryCatch(
-    () => AsyncStorage.removeItem(tv.name),
+    () => AsyncStorage.removeItem(createKeyForTV(tv)),
     e => new Error('Something went wrong deleting the TV' + JSON.stringify(e)),
   );
 }

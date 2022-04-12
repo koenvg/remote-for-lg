@@ -136,3 +136,8 @@ export async function fetchDeviceDescription(
   const obj = parser.parse(content);
   return obj.root.device;
 }
+
+export async function ping(ip: string) {
+  const res = await fetch(`http://${ip}`);
+  if (res.status >= 300) throw new Error(res.statusText);
+}

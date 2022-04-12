@@ -4,6 +4,10 @@ import {useAppState} from '../../hooks/useAppState';
 import {createMachine, assign, StateFrom} from 'xstate';
 import {useMachine} from '@xstate/react';
 import {wake} from '../wol';
+import {task, taskEither} from 'fp-ts';
+import {pipe} from 'fp-ts/lib/function';
+import {ping} from 'api/networkDiscovery';
+import {retry} from 'utils/taskEither-utils';
 export interface Props {
   context: LGContext;
 }
@@ -106,9 +110,7 @@ const createTVMachine = (myTv: {
               id: 'sendingOnSignal',
               invoke: {
                 id: 'turning-tv-on',
-                src: ({tv}) => {
-                  return tv.mac ? wake(tv.mac) : Promise.resolve('');
-                },
+                src: 'turnOn',
                 onDone: '#connecting',
                 onError: 'failed',
               },
@@ -122,6 +124,21 @@ const createTVMachine = (myTv: {
       actions: {
         turningOff: ({api}) => {
           api?.powerOff();
+        },
+        turnOn: ({tv}) => {
+          if (!tv.mac) return;
+
+          return pipe(
+            () => wake(tv.mac!),
+            taskEither.fromTask,
+            taskEither.chain(() =>
+              pipe(
+                taskEither.tryCatch(() => ping(tv.ip), String),
+                task.delay(2000),
+                retry(2),
+              ),
+            ),
+          )();
         },
       },
     },
