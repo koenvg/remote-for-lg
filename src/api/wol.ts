@@ -19,14 +19,12 @@ function createMagicPacket(mac: string) {
 
 export async function wake(mac: string) {
   const address = '255.255.255.255';
-  const ports = [7, 9];
+  const port = 7;
 
   const magicPacket = createMagicPacket(mac);
   const socket = await udpService.createSocket();
 
-  await Promise.all(
-    ports.map(port => udpService.send(socket, magicPacket, address, port)),
-  );
+  await udpService.send(socket, magicPacket, address, port);
 
   socket.close();
 }

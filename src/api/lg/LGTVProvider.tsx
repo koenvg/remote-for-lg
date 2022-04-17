@@ -121,24 +121,26 @@ const createTVMachine = (myTv: {
       },
     },
     {
-      actions: {
-        turningOff: ({api}) => {
-          api?.powerOff();
-        },
-        turnOn: ({tv}) => {
+      services: {
+        turnOn: async ({tv}) => {
           if (!tv.mac) return;
 
-          return pipe(
+          await pipe(
             () => wake(tv.mac!),
             taskEither.fromTask,
             taskEither.chain(() =>
               pipe(
                 taskEither.tryCatch(() => ping(tv.ip), String),
                 task.delay(2000),
-                retry(2),
+                retry(1),
               ),
             ),
           )();
+        },
+      },
+      actions: {
+        turningOff: ({api}) => {
+          api?.powerOff();
         },
       },
     },
