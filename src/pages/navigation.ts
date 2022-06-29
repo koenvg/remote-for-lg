@@ -13,12 +13,13 @@ export type StackParamList = {
   Home: TV;
   TVSettings: undefined;
   GeneralSettings: undefined;
+  SelectTV: undefined;
 };
 
 export type HomeParamList = {
-  Settings: undefined;
-  Remote: undefined;
-  Apps: undefined;
+  Settings: TV;
+  Remote: TV;
+  Apps: TV;
 };
 
 export const useNavigation = () =>
@@ -26,3 +27,4 @@ export const useNavigation = () =>
 
 export type AddTVRoute = NativeStackScreenProps<StackParamList, 'AddTV'>;
 export type HomeRoute = NativeStackScreenProps<StackParamList, 'Home'>;
+export type RemoteRoute = NativeStackScreenProps<HomeParamList, 'Remote'>;

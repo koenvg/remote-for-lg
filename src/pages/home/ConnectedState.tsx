@@ -9,10 +9,13 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import {HomeParamList} from 'pages/navigation';
 import {GeneralSettings} from './settings/GeneralSettings';
 import {useMyTheme} from 'theme';
+import {TV} from 'services/tvService';
 
-export interface Props {}
+export interface Props {
+  tv: TV;
+}
 const Tab = createBottomTabNavigator<HomeParamList>();
-export const ConnectedState: FunctionComponent<Props> = () => {
+export const ConnectedState: FunctionComponent<Props> = ({tv}) => {
   const {theme} = useMyTheme();
   return (
     <Tab.Navigator
@@ -26,6 +29,7 @@ export const ConnectedState: FunctionComponent<Props> = () => {
       <Tab.Screen
         name="Remote"
         component={Remote}
+        initialParams={tv}
         options={{
           tabBarLabel: ({color}) => (
             <MaterialCommunityIcons name="remote-tv" color={color} size={18} />
@@ -35,6 +39,7 @@ export const ConnectedState: FunctionComponent<Props> = () => {
       <Tab.Screen
         name="Apps"
         component={TVApps}
+        initialParams={tv}
         options={{
           tabBarLabel: ({color}) => (
             <MaterialCommunityIcons name="apps" color={color} size={18} />
@@ -44,6 +49,7 @@ export const ConnectedState: FunctionComponent<Props> = () => {
       <Tab.Screen
         name="Settings"
         component={GeneralSettings}
+        initialParams={tv}
         options={{
           tabBarLabel: ({color}) => (
             <MaterialCommunityIcons name="cog" color={color} size={18} />

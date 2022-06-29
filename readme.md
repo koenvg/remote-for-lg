@@ -1,4 +1,11 @@
-Resources:
+== Launching android
+Terminal 1: `yarn start`
+Terminal 2: `yarn android` or launch it via android studio.
+
+== Releasing the app
+
+
+== Resources:
 
 - https://www.webosose.org/docs/reference/ls2-api/com-webos-service-applicationmanager/
 - https://github.com/supersaiyanmode/PyWebOSTV/blob/master/pywebostv/controls.py

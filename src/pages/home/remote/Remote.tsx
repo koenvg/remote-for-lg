@@ -1,3 +1,4 @@
+/* eslint-disable react-native/no-inline-styles */
 import React, {FunctionComponent, useEffect, useState} from 'react';
 import {StyleSheet, View} from 'react-native';
 import {useLGConnected} from 'api/lg/LGTVProvider';
@@ -5,16 +6,14 @@ import {PrimaryButton} from 'components/PrimaryButton';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Slider from '@react-native-community/slider';
-import {TV} from 'services/tvService';
 import {ArrowControls} from './ArrowControls';
 import {MyText} from 'components/MyText';
 import {useMyTheme} from 'theme';
+import {useRoute} from '@react-navigation/native';
+import {RemoteRoute} from 'pages/navigation';
 
-export interface Props {
-  tv: TV;
-}
-
-export const Remote: FunctionComponent<Props> = ({}) => {
+export const Remote: FunctionComponent = () => {
+  const {params: tv} = useRoute<RemoteRoute['route']>();
   const {api, turnOff} = useLGConnected();
   const [volume, setVolume] = useState(0);
   const {theme} = useMyTheme();
@@ -34,7 +33,7 @@ export const Remote: FunctionComponent<Props> = ({}) => {
 
   return (
     <View style={styles.container}>
-      <View style={styles.row}>
+      <View style={{...styles.row, alignItems: 'center'}}>
         <PrimaryButton onPress={() => api?.press('HOME')}>
           <MaterialCommunityIcons
             name="home-outline"
@@ -42,6 +41,7 @@ export const Remote: FunctionComponent<Props> = ({}) => {
             size={theme.iconSize}
           />
         </PrimaryButton>
+        <MyText>{tv.name}</MyText>
         <PrimaryButton onPress={turnOff}>
           <MaterialCommunityIcons name="power" color={theme.red} size={24} />
         </PrimaryButton>

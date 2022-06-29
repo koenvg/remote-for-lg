@@ -6,7 +6,6 @@ export interface TV {
   name: string;
   ip: string;
   clientKey: string;
-  default: boolean;
   mac?: string;
 }
 
@@ -35,29 +34,7 @@ const getRegisteredTVs = pipe(
   ),
 );
 
-const isDefaultTV = (tv: TV) => tv.default;
-
-const registerTV = (tv: Omit<TV, 'default'>) => {
-  return pipe(
-    getRegisteredTVs,
-    taskEither.map(readonlyArray.some(isDefaultTV)),
-    taskEither.map(hasDefault => ({...tv, default: !hasDefault})),
-    taskEither.chain(save),
-  );
-};
-
-function saveAll(tvs: ReadonlyArray<TV>) {
-  return pipe(
-    tvs,
-    readonlyArray.map(tv => [createKeyForTV(tv), JSON.stringify(tv)] as const),
-    keyPairs =>
-      taskEither.tryCatch(
-        () => AsyncStorage.multiSet(keyPairs as any),
-        e =>
-          new Error('Something went wrong saving the TVs' + JSON.stringify(e)),
-      ),
-  );
-}
+const registerTV = save;
 
 function save(tv: TV) {
   return pipe(
@@ -66,17 +43,6 @@ function save(tv: TV) {
       e => new Error('Something went wrong saving the TV' + JSON.stringify(e)),
     ),
     taskEither.map(() => tv),
-  );
-}
-
-function setDefaultTV(tv: TV) {
-  return pipe(
-    getRegisteredTVs,
-    taskEither.map(
-      readonlyArray.map(registered => ({...registered, default: false})),
-    ),
-    taskEither.chain(saveAll),
-    taskEither.chain(() => save({...tv, default: true})),
   );
 }
 
@@ -90,6 +56,5 @@ function deleteTV(tv: TV) {
 export const tvService = {
   registerTV,
   getRegisteredTVs,
-  setDefaultTV,
   deleteTV,
 };

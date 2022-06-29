@@ -36,7 +36,7 @@ export const Home: FunctionComponent<Props> = () => {
   if (state.matches('connected')) {
     return (
       <LGTVProvider context={value}>
-        <ConnectedState />
+        <ConnectedState tv={tv} />
       </LGTVProvider>
     );
   }

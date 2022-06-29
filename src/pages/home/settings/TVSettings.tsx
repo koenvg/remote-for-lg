@@ -1,15 +1,18 @@
 import {MyText} from 'components/MyText';
 import {Neumorphism} from 'components/Neumorphism';
 import {TransparentButton} from 'components/TransparentButton';
-import {either} from 'fp-ts';
 import React, {FunctionComponent} from 'react';
 import {Button, ScrollView, StyleSheet, View} from 'react-native';
-import {useMutation, useQuery, useQueryClient} from 'react-query';
+import {useMutation, useQueryClient} from 'react-query';
 import {TV, tvService} from 'services/tvService';
 // @ts-ignore
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {useNavigation} from 'pages/navigation';
 import {useMyTheme} from 'theme';
+import {
+  REGISTERED_TVS_QUERY,
+  useRegisteredTVs,
+} from 'services/useRegisteredTVs';
 
 export interface Props {}
 
@@ -17,36 +20,23 @@ export const TVSettings: FunctionComponent<Props> = () => {
   const navigation = useNavigation();
   const queryClient = useQueryClient();
   const {theme} = useMyTheme();
-  const {data} = useQuery('tvs', tvService.getRegisteredTVs);
-
-  const {mutateAsync: updateDefault} = useMutation<void, unknown, TV>(
-    'updateDefault',
-    {
-      mutationFn: async tv => {
-        await tvService.setDefaultTV(tv)();
-      },
-      onSuccess: () => {
-        queryClient.invalidateQueries('tvs');
-      },
-    },
-  );
+  const {data: tvs} = useRegisteredTVs();
 
   const {mutateAsync: deleteTV} = useMutation<void, unknown, TV>('deleteTV', {
     mutationFn: async tv => {
       await tvService.deleteTV(tv)();
     },
     onSuccess: () => {
-      queryClient.invalidateQueries('tvs');
+      queryClient.invalidateQueries(REGISTERED_TVS_QUERY);
     },
   });
 
-  if (!data) return null;
-  if (either.isLeft(data)) return null;
+  if (!tvs) return null;
 
   return (
     <View style={styles.container}>
       <ScrollView>
-        {data.right.map(tv => {
+        {tvs.map(tv => {
           return (
             <Neumorphism
               key={tv.name}
@@ -56,13 +46,7 @@ export const TVSettings: FunctionComponent<Props> = () => {
               darkColor={theme.neumorphismDark}>
               <View style={styles.tv}>
                 <MyText style={{flex: 1}}>{tv.name}</MyText>
-                {tv.default ? (
-                  <MyText style={{color: theme.accent}}>Default</MyText>
-                ) : (
-                  <TransparentButton onPress={() => updateDefault(tv)}>
-                    <MyText>Make default</MyText>
-                  </TransparentButton>
-                )}
+
                 <TransparentButton onPress={() => deleteTV(tv)}>
                   <MaterialCommunityIcons
                     name="delete"
