@@ -49,7 +49,6 @@ export const ConnectedState: FunctionComponent<Props> = ({tv}) => {
       <Tab.Screen
         name="Settings"
         component={GeneralSettings}
-        initialParams={tv}
         options={{
           tabBarLabel: ({color}) => (
             <MaterialCommunityIcons name="cog" color={color} size={18} />

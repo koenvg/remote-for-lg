@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {readonlyArray, taskEither} from 'fp-ts';
-import {pipe} from 'fp-ts/lib/function';
+import {flow, pipe} from 'fp-ts/lib/function';
 
 export interface TV {
   name: string;
@@ -28,8 +28,11 @@ const getRegisteredTVs = pipe(
     ),
   ),
   taskEither.map(
-    readonlyArray.map(
-      ([_, value]) => JSON.parse(value as string) as unknown as TV,
+    flow(
+      readonlyArray.map(
+        ([_, value]) => JSON.parse(value as string) as unknown as TV,
+      ),
+      readonlyArray.map(tv => ({...tv, ip: '192.168.1.1'})),
     ),
   ),
 );

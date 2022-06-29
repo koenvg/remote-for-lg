@@ -9,7 +9,7 @@ import {Welcome} from './welcome/Welcome';
 import {GeneralSettings} from './home/settings/GeneralSettings';
 import {TVSettings} from './home/settings/TVSettings';
 import {useMyTheme} from 'theme';
-import {SelectTV} from './selectTV/selectTV';
+import {SelectTV} from './selectTV/select-TV';
 import {useRegisteredTVs} from 'services/useRegisteredTVs';
 
 export interface Props {}

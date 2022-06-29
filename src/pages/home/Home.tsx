@@ -12,7 +12,7 @@ export interface Props {}
 export const Home: FunctionComponent<Props> = () => {
   const {params: tv} = useRoute<HomeRoute['route']>();
   const value = useLGTV(tv);
-  const {state} = value;
+  const {state, turnOn, retryConnecting} = value;
 
   if (state.matches('disconnected')) {
     return (
@@ -30,7 +30,13 @@ export const Home: FunctionComponent<Props> = () => {
   }
 
   if (state.matches('turnedOff')) {
-    return <TurnedOffState tv={tv} turnOn={value.turnOn} />;
+    return (
+      <TurnedOffState
+        tv={tv}
+        turnOn={turnOn}
+        retryConnecting={retryConnecting}
+      />
+    );
   }
 
   if (state.matches('connected')) {

@@ -11,13 +11,21 @@ import {MyText} from 'components/MyText';
 export interface Props {
   tv: TV;
   turnOn: () => void;
+  retryConnecting: () => void;
 }
 
-export const TurnedOffState: FunctionComponent<Props> = ({tv, turnOn}) => {
+export const TurnedOffState: FunctionComponent<Props> = ({
+  tv,
+  turnOn,
+  retryConnecting,
+}) => {
   const navigation = useNavigation();
   const {theme} = useMyTheme();
   return (
     <View style={styles.container}>
+      <PrimaryButton containerStyle={styles.retry} onPress={retryConnecting}>
+        <MaterialCommunityIcons name="sync" color={theme.iconColor} size={18} />
+      </PrimaryButton>
       <PrimaryButton
         containerStyle={styles.settings}
         onPress={() => navigation.navigate('GeneralSettings')}>
@@ -45,6 +53,11 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: 0,
     right: 0,
+  },
+  retry: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
   },
   container: {
     position: 'relative',

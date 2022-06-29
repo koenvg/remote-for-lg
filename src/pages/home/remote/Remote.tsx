@@ -10,13 +10,16 @@ import {ArrowControls} from './ArrowControls';
 import {MyText} from 'components/MyText';
 import {useMyTheme} from 'theme';
 import {useRoute} from '@react-navigation/native';
-import {RemoteRoute} from 'pages/navigation';
+import {RemoteRoute, useNavigation} from 'pages/navigation';
 
 export const Remote: FunctionComponent = () => {
   const {params: tv} = useRoute<RemoteRoute['route']>();
+  const navigation = useNavigation();
   const {api, turnOff} = useLGConnected();
   const [volume, setVolume] = useState(0);
   const {theme} = useMyTheme();
+
+  const navigateToSelectTV = () => navigation.navigate('SelectTV');
 
   useEffect(() => {
     const fn = async () => {
@@ -41,7 +44,7 @@ export const Remote: FunctionComponent = () => {
             size={theme.iconSize}
           />
         </PrimaryButton>
-        <MyText>{tv.name}</MyText>
+        <MyText onPress={navigateToSelectTV}>{tv.name}</MyText>
         <PrimaryButton onPress={turnOff}>
           <MaterialCommunityIcons name="power" color={theme.red} size={24} />
         </PrimaryButton>

@@ -16,6 +16,7 @@ interface LGContext {
   state: StateFrom<ReturnType<typeof createTVMachine>>;
   turnOn: () => void;
   turnOff: () => void;
+  retryConnecting: () => void;
 }
 
 const LGTVContext = React.createContext<LGContext>({} as any);
@@ -101,7 +102,10 @@ const createTVMachine = (myTv: {
           },
         },
         turnedOff: {
-          on: {TURN_ON: '#sendingOnSignal'},
+          on: {
+            TURN_ON: '#sendingOnSignal',
+            RECONNECT: 'connecting',
+          },
         },
         turningTVOn: {
           initial: 'sendingOnSignal',
@@ -123,15 +127,16 @@ const createTVMachine = (myTv: {
     {
       services: {
         turnOn: async ({tv}) => {
-          if (!tv.mac) return;
+          const mac = tv.mac;
+          if (!mac) return;
 
           await pipe(
-            () => wake(tv.mac!),
+            () => wake(mac),
             taskEither.fromTask,
             taskEither.chain(() =>
               pipe(
                 taskEither.tryCatch(() => ping(tv.ip), String),
-                task.delay(2000),
+                task.delay(3000),
                 retry(1),
               ),
             ),
@@ -173,6 +178,7 @@ export const useLGTV = (tv: {ip: string; clientKey: string}): LGContext => {
     state,
     turnOff: () => dispatch('TURN_OFF'),
     turnOn: () => dispatch('TURN_ON'),
+    retryConnecting: () => dispatch('RECONNECT'),
   };
 };
 

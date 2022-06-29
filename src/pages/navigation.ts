@@ -17,7 +17,7 @@ export type StackParamList = {
 };
 
 export type HomeParamList = {
-  Settings: TV;
+  Settings: undefined;
   Remote: TV;
   Apps: TV;
 };
