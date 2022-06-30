@@ -28,11 +28,8 @@ const getRegisteredTVs = pipe(
     ),
   ),
   taskEither.map(
-    flow(
-      readonlyArray.map(
-        ([_, value]) => JSON.parse(value as string) as unknown as TV,
-      ),
-      readonlyArray.map(tv => ({...tv, ip: '192.168.1.1'})),
+    readonlyArray.map(
+      ([_, value]) => JSON.parse(value as string) as unknown as TV,
     ),
   ),
 );
