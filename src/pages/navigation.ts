@@ -20,6 +20,7 @@ export type HomeParamList = {
   Settings: undefined;
   Remote: TV;
   Apps: TV;
+  Keyboard: TV;
 };
 
 export const useNavigation = () =>

@@ -316,6 +316,17 @@ export class LGAPI {
     p.send(`type:button\nname:${button}\n\n\n`);
   }
 
+  async type(text: string) {
+    return sendRequest(
+      {
+        type: 'request',
+        uri: 'ssap://com.webos.service.ime/insertText',
+        payload: {text},
+      },
+      this.socket,
+    );
+  }
+
   async listApps() {
     const res = await sendRequest<AppListingResponse>(
       {

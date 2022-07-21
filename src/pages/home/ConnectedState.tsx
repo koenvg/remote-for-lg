@@ -10,6 +10,7 @@ import {HomeParamList} from 'pages/navigation';
 import {GeneralSettings} from './settings/GeneralSettings';
 import {useMyTheme} from 'theme';
 import {TV} from 'services/tvService';
+import {KeyboardTV} from './keyboard/KeyboardTV';
 
 export interface Props {
   tv: TV;
@@ -43,6 +44,16 @@ export const ConnectedState: FunctionComponent<Props> = ({tv}) => {
         options={{
           tabBarLabel: ({color}) => (
             <MaterialCommunityIcons name="apps" color={color} size={18} />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Keyboard"
+        component={KeyboardTV}
+        initialParams={tv}
+        options={{
+          tabBarLabel: ({color}) => (
+            <MaterialCommunityIcons name="keyboard" color={color} size={18} />
           ),
         }}
       />
